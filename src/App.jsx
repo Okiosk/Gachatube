@@ -7,6 +7,7 @@ import BadgesView from './components/BadgesView';
 import VideoModal from './components/VideoModal';
 import ToastContainer from './components/ToastNotification';
 import AdminView from './components/AdminView';
+import CombatView from './components/CombatView';
 import { getMuteState, playHoloShineSound } from './utils/audio';
 import { ACHIEVEMENTS, checkNewAchievements, computeReward } from './utils/achievements';
 import { BOOSTER_PRICES, dailyRewardAmount } from './utils/gameConfig';
@@ -408,6 +409,24 @@ export default function App() {
               packsOpened={packsOpened}
               onPlayVideo={(card) => setActiveVideoCard(card)}
               onOpenBoosterTab={() => setActiveTab('booster')}
+            />
+          )}
+
+          {activeTab === 'combat' && (
+            <CombatView
+              collection={collection}
+              coins={coins}
+              onRewardCoins={(amt) => {
+                setCoins(c => c + amt);
+                addToast({
+                  type: 'daily',
+                  emoji: '🪙',
+                  title: 'Victoire en Arène !',
+                  desc: `+${amt} TubeCoins remportés !`,
+                });
+              }}
+              onPlayVideo={(card) => setActiveVideoCard(card)}
+              onOpenShop={() => setActiveTab('booster')}
             />
           )}
 

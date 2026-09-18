@@ -1,11 +1,12 @@
 import React from 'react';
-import { Package, Layers, Database, BarChart3, Volume2, VolumeX, Trophy, Award } from 'lucide-react';
+import { Package, Layers, Database, BarChart3, Volume2, VolumeX, Trophy, Award, Swords } from 'lucide-react';
 import { toggleMute } from '../utils/audio';
 import { ACHIEVEMENTS } from '../utils/achievements';
 
 const NAV_ITEMS = [
   { id: 'booster',      label: 'Boutique',    icon: Package,  desc: 'Boosters' },
   { id: 'binder',       label: 'Collection',  icon: Layers,   desc: 'Collection' },
+  { id: 'combat',       label: 'Combat',      icon: Swords,   desc: 'Arène IA' },
   { id: 'badges',       label: 'Badges',      icon: Award,    desc: 'Créateurs' },
   { id: 'achievements', label: 'Trophées',    icon: Trophy,   desc: 'Exploits' },
 ];
@@ -27,6 +28,7 @@ export default function Header({
 
   const getBadgeForTab = (id) => {
     if (id === 'binder') return uniqueCardsCount || null;
+    if (id === 'combat') return 'VS';
     if (id === 'badges') return earnedBadgesCount || null;
     if (id === 'achievements') return unlockedAchievementsCount > 0 ? `${unlockedAchievementsCount}/${ACHIEVEMENTS.length}` : null;
     return null;
