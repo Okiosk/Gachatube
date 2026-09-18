@@ -40,7 +40,9 @@ import { RARITY_CONFIG, formatNumber } from './CardItem';
 export default function CombatView({
   collection = {},
   coins = 0,
+  battleStats = {},
   onRewardCoins,
+  onBattleFinish,
   onPlayVideo,
   onOpenShop
 }) {
@@ -64,6 +66,7 @@ export default function CombatView({
   const [turn, setTurn] = useState('player'); // 'player' | 'ai' | 'animating'
   const [roundNumber, setRoundNumber] = useState(1);
   const [combatLogs, setCombatLogs] = useState([]);
+  const [ultimatesUsedInMatch, setUltimatesUsedInMatch] = useState(0);
   
   // Animation states
   const [shakeTarget, setShakeTarget] = useState(null); // 'player' | 'ai' | null
@@ -135,6 +138,7 @@ export default function CombatView({
     setActiveAiIdx(0);
     setRoundNumber(1);
     setTurn('player');
+    setUltimatesUsedInMatch(0);
     setCombatLogs([
       `⚔️ Début du combat contre ${AI_DIFFICULTIES.find(d => d.id === selectedDifficulty)?.name || 'l\'IA'} !`,
       `🎮 À toi de jouer ! Choisis une action pour ${pTeam[0].channel}.`
@@ -154,6 +158,18 @@ export default function CombatView({
       const reward = diff ? diff.reward : 10;
       setRewardWon(reward);
       if (onRewardCoins) onRewardCoins(reward);
+
+      const flawless = pTeam.every(c => c.hp > 0);
+      if (onBattleFinish) {
+        onBattleFinish({
+          won: true,
+          difficulty: selectedDifficulty,
+          flawless,
+          ultimatesCount: ultimatesUsedInMatch,
+          reward,
+        });
+      }
+
       playVictoryJingle();
       setPhase('victory');
       return true;
@@ -161,6 +177,15 @@ export default function CombatView({
 
     const allPlayerDefeated = pTeam.every(c => c.hp <= 0);
     if (allPlayerDefeated) {
+      if (onBattleFinish) {
+        onBattleFinish({
+          won: false,
+          difficulty: selectedDifficulty,
+          flawless: false,
+          ultimatesCount: ultimatesUsedInMatch,
+          reward: 0,
+        });
+      }
       playDefeatSound();
       setPhase('defeat');
       return true;
@@ -276,6 +301,7 @@ export default function CombatView({
   const handlePlayerUltimate = () => {
     if (turn !== 'player' || !playerActive || !aiActive || playerActive.buzz < playerActive.maxBuzz) return;
     setTurn('animating');
+    setUltimatesUsedInMatch(u => u + 1);
     playSpecialBuzzSound();
 
     const currentPActive = { ...playerActive, isShielded: false };
@@ -611,6 +637,8 @@ export default function CombatView({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {AI_DIFFICULTIES.map((diff) => {
               const isSelected = selectedDifficulty === diff.id;
+              const isDefeated = (battleStats?.difficultiesDefeated || []).includes(diff.id);
+
               return (
                 <div
                   key={diff.id}
@@ -624,9 +652,16 @@ export default function CombatView({
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-2xl">{diff.emoji}</span>
-                      <span className="px-2 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/50 text-amber-300 text-[10px] font-mono font-black">
-                        +{diff.reward} 🪙
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {isDefeated && (
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[9px] font-mono font-black flex items-center gap-1">
+                            ✓ VAINCU
+                          </span>
+                        )}
+                        <span className="px-2 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/50 text-amber-300 text-[10px] font-mono font-black">
+                          +{diff.reward} 🪙
+                        </span>
+                      </div>
                     </div>
                     <div>
                       <h3 className="font-black text-white text-base leading-snug">{diff.name}</h3>

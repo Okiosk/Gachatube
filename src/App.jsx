@@ -34,6 +34,13 @@ const DEFAULT_PLAYER = {
   lastLoginDate:        '',
   packsOpened:          0,
   boostersOpenedByType: { decouverte: 0, standard: 0, gaming: 0, culture: 0, viral: 0, collector: 0 },
+  battleStats: {
+    battlesWon: 0,
+    battlesPlayed: 0,
+    difficultiesDefeated: [],
+    flawlessWins: 0,
+    ultimatesUsed: 0,
+  },
 };
 
 // ── Pure helpers ──────────────────────────────────────────────────────────────
@@ -87,6 +94,7 @@ function loadPlayerData() {
       boosters:             { ...DEFAULT_PLAYER.boosters,             ...(saved.boosters || {}) },
       achievements:         saved.achievements         || {},
       boostersOpenedByType: { ...DEFAULT_PLAYER.boostersOpenedByType, ...(saved.boostersOpenedByType || {}) },
+      battleStats:          { ...DEFAULT_PLAYER.battleStats,          ...(saved.battleStats || {}) },
     };
   } catch {
     return { ...DEFAULT_PLAYER };
@@ -134,6 +142,7 @@ export default function App() {
   const [lastLoginDate,        setLastLoginDate]        = useState(() => loadPlayerData().lastLoginDate);
   const [packsOpened,          setPacksOpened]          = useState(() => loadPlayerData().packsOpened);
   const [boostersOpenedByType, setBoostersOpenedByType] = useState(() => loadPlayerData().boostersOpenedByType);
+  const [battleStats,          setBattleStats]          = useState(() => loadPlayerData().battleStats);
 
   // Channel stats — fetched once from server
   const [channelStats, setChannelStats] = useState([]);
@@ -291,10 +300,10 @@ export default function App() {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY_PLAYER, JSON.stringify({
-        coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType,
+        coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType, battleStats,
       }));
     } catch (e) { console.warn('Erreur sauvegarde player:', e); }
-  }, [coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType]);
+  }, [coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType, battleStats]);
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY_COLLECTION, JSON.stringify(collection)); }
@@ -350,6 +359,40 @@ export default function App() {
     };
     applyAchievements(nextStats, achievements);
   }, [collection, packsOpened, boostersOpenedByType, coins, loginStreak, achievements, channelStats, applyAchievements]);
+
+  // ── Battle completion & achievement check ─────────────────────────────────
+  const handleBattleFinish = useCallback(({ won, difficulty, flawless, ultimatesCount, reward }) => {
+    setBattleStats(prev => {
+      const prevDefeated = prev.difficultiesDefeated || [];
+      const nextDefeated = (won && !prevDefeated.includes(difficulty))
+        ? [...prevDefeated, difficulty]
+        : prevDefeated;
+
+      const nextBattleStats = {
+        ...prev,
+        battlesPlayed: (prev.battlesPlayed || 0) + 1,
+        battlesWon: (prev.battlesWon || 0) + (won ? 1 : 0),
+        difficultiesDefeated: nextDefeated,
+        flawlessWins: (prev.flawlessWins || 0) + (flawless ? 1 : 0),
+        ultimatesUsed: (prev.ultimatesUsed || 0) + (ultimatesCount || 0),
+      };
+
+      const rarityCount = computeRarityCount(collection);
+      const nextStats = {
+        packsOpened,
+        uniqueCards: Object.keys(collection).length,
+        coins: coins + (reward || 0),
+        loginStreak,
+        rarityCount,
+        boostersOpened: boostersOpenedByType,
+        badgesEarned: earnedBadgesCount,
+        battleStats: nextBattleStats,
+      };
+      applyAchievements(nextStats, achievements);
+
+      return nextBattleStats;
+    });
+  }, [collection, packsOpened, coins, loginStreak, boostersOpenedByType, earnedBadgesCount, achievements, applyAchievements]);
 
   // ── Derived ───────────────────────────────────────────────────────────────
   const uniqueCardsCount          = Object.keys(collection).length;
@@ -416,6 +459,7 @@ export default function App() {
             <CombatView
               collection={collection}
               coins={coins}
+              battleStats={battleStats}
               onRewardCoins={(amt) => {
                 setCoins(c => c + amt);
                 addToast({
@@ -425,6 +469,7 @@ export default function App() {
                   desc: `+${amt} TubeCoins remportés !`,
                 });
               }}
+              onBattleFinish={handleBattleFinish}
               onPlayVideo={(card) => setActiveVideoCard(card)}
               onOpenShop={() => setActiveTab('booster')}
             />
@@ -435,6 +480,8 @@ export default function App() {
               collection={collection}
               channelStats={channelStats}
               onRefreshChannels={fetchChannels}
+              battleStats={battleStats}
+              onOpenCombatTab={() => setActiveTab('combat')}
             />
           )}
 
@@ -447,6 +494,7 @@ export default function App() {
               loginStreak={loginStreak}
               boostersOpenedByType={boostersOpenedByType}
               badgesEarned={earnedBadgesCount}
+              battleStats={battleStats}
             />
           )}
         </main>

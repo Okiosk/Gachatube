@@ -2,10 +2,11 @@ import React from 'react';
 import { Trophy, Lock, CheckCircle2, Award, Sparkles, UserCheck } from 'lucide-react';
 import { ACHIEVEMENTS } from '../utils/achievements';
 
-const CATEGORY_ORDER = ['Collection', 'Rareté', 'Connexion', 'Économie', 'Boutique', 'Badges'];
+const CATEGORY_ORDER = ['Collection', 'Combats', 'Rareté', 'Connexion', 'Économie', 'Boutique', 'Badges'];
 
 const CATEGORY_CONFIG = {
   Collection: { color: '#38bdf8', emoji: '🃏', name: 'Collection & Archives' },
+  Combats:    { color: '#ef4444', emoji: '⚔️', name: 'Arène & Duels TCG' },
   Rareté:     { color: '#facc15', emoji: '⭐', name: 'Chasse aux Cartes d\'Or' },
   Connexion:  { color: '#fb923c', emoji: '🔥', name: 'Régularité du Collectionneur' },
   Économie:   { color: '#34d399', emoji: '🪙', name: 'Banque de TubeCoins' },
@@ -102,6 +103,7 @@ export default function AchievementsView({
   loginStreak = 0,
   boostersOpenedByType = {},
   badgesEarned = 0,
+  battleStats = {},
 }) {
   const rarityCount = Object.values(collection).reduce((acc, item) => {
     const r = item.card?.rarity;
@@ -117,6 +119,7 @@ export default function AchievementsView({
     rarityCount,
     boostersOpened: boostersOpenedByType,
     badgesEarned,
+    battleStats,
   };
 
   const unlockedCount    = Object.keys(achievements).length;

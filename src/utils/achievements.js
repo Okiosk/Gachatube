@@ -378,6 +378,92 @@ export const ACHIEVEMENTS = [
     check: (s) => (s.badgesEarned || 0) >= 50,
     progress: (s) => ({ current: s.badgesEarned || 0, max: 50 }),
   },
+
+  // ── 8. ARÈNE & COMBATS ──
+  {
+    id: 'battle_first_win',
+    name: 'Premier Sang',
+    desc: 'Remporte ton premier combat dans l\'Arène',
+    emoji: '⚔️',
+    reward: 5,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.battlesWon || 0) >= 1,
+  },
+  {
+    id: 'battle_wins_5',
+    name: 'Gladiateur du Web',
+    desc: 'Remporte 5 victoires dans l\'Arène',
+    emoji: '🥊',
+    reward: 10,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.battlesWon || 0) >= 5,
+    progress: (s) => ({ current: s.battleStats?.battlesWon || 0, max: 5 }),
+  },
+  {
+    id: 'battle_wins_15',
+    name: 'Vétéran de l\'Arène',
+    desc: 'Remporte 15 victoires dans l\'Arène',
+    emoji: '🛡️',
+    reward: 20,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.battlesWon || 0) >= 15,
+    progress: (s) => ({ current: s.battleStats?.battlesWon || 0, max: 15 }),
+  },
+  {
+    id: 'battle_wins_30',
+    name: 'Légende de l\'Octogone',
+    desc: 'Remporte 30 victoires dans l\'Arène',
+    emoji: '👑',
+    reward: 40,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.battlesWon || 0) >= 30,
+    progress: (s) => ({ current: s.battleStats?.battlesWon || 0, max: 30 }),
+  },
+  {
+    id: 'battle_boss_win',
+    name: 'Chute du Roi des Tendances',
+    desc: 'Terrasse le Boss des Tendances en difficulté Légendaire',
+    emoji: '🔥',
+    reward: 30,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.difficultiesDefeated || []).includes('boss'),
+  },
+  {
+    id: 'battle_all_difficulties',
+    name: 'Grand Chelem de l\'Arène',
+    desc: 'Triomphe des 4 adversaires de l\'Arène (Débutant, Moyen, Expert, Boss)',
+    emoji: '🏆',
+    reward: 35,
+    category: 'Combats',
+    check: (s) => {
+      const d = s.battleStats?.difficultiesDefeated || [];
+      return ['easy', 'medium', 'hard', 'boss'].every(lvl => d.includes(lvl));
+    },
+    progress: (s) => {
+      const d = s.battleStats?.difficultiesDefeated || [];
+      const count = ['easy', 'medium', 'hard', 'boss'].filter(lvl => d.includes(lvl)).length;
+      return { current: count, max: 4 };
+    },
+  },
+  {
+    id: 'battle_flawless',
+    name: 'Victoire Parfaite',
+    desc: 'Remporte un combat sans perdre la moindre carte',
+    emoji: '✨',
+    reward: 15,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.flawlessWins || 0) >= 1,
+  },
+  {
+    id: 'battle_ultimates_10',
+    name: 'Buzzmaster',
+    desc: 'Déclenche 10 Coups Viraux (Ultimes) en combat',
+    emoji: '⚡',
+    reward: 15,
+    category: 'Combats',
+    check: (s) => (s.battleStats?.ultimatesUsed || 0) >= 10,
+    progress: (s) => ({ current: s.battleStats?.ultimatesUsed || 0, max: 10 }),
+  },
 ];
 
 /**
