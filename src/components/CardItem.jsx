@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Play, Sparkles, Crown, Shield, Flame, Heart, MessageSquare, Check, Eye, Zap, Radio } from 'lucide-react';
+import { getChannelAvatar } from '../utils/channelAvatars';
 
 export const RARITY_CONFIG = {
   COMMUNE: {
@@ -135,6 +136,7 @@ export default function CardItem({
   const rarity = RARITY_CONFIG[card.rarity] || RARITY_CONFIG.COMMUNE;
   const hue = channelHue(card.channel);
   const initials = channelInitials(card.channel);
+  const avatarUrl = card.channel_avatar_url || card.channel_avatar || getChannelAvatar(card.channel);
 
   const handleMouseMove = (e) => {
     if (!interactive || !cardRef.current) return;
@@ -158,6 +160,7 @@ export default function CardItem({
   const sizeConfig = {
     compact: {
       card: 'w-[185px] h-[278px]',
+      avatar: 'w-5 h-5',
       padding: 'p-1.5',
       innerPadding: 'p-2',
       title: 'text-[11px]',
@@ -171,6 +174,7 @@ export default function CardItem({
     },
     normal: {
       card: 'w-[270px] sm:w-[285px] h-[400px] sm:h-[420px]',
+      avatar: 'w-6 h-6',
       padding: 'p-2',
       innerPadding: 'p-3',
       title: 'text-[13px]',
@@ -184,6 +188,7 @@ export default function CardItem({
     },
     large: {
       card: 'w-[320px] sm:w-[340px] h-[480px] sm:h-[510px]',
+      avatar: 'w-7 h-7',
       padding: 'p-2.5',
       innerPadding: 'p-4',
       title: 'text-sm',
@@ -197,6 +202,7 @@ export default function CardItem({
     },
   }[size] || {
     card: 'w-[285px] h-[420px]',
+    avatar: 'w-6 h-6',
     padding: 'p-2',
     innerPadding: 'p-3',
     title: 'text-[13px]',
@@ -262,12 +268,30 @@ export default function CardItem({
           <div className="flex items-center gap-1.5 min-w-0 flex-1">
             {/* Creator Avatar Badge */}
             <div
-              className="w-5 h-5 rounded-full shrink-0 flex items-center justify-center font-['Outfit'] font-black text-[8px] text-white shadow-xs border border-white/30"
+              className={`${sizeConfig.avatar} rounded-full shrink-0 flex items-center justify-center font-['Outfit'] font-black text-[8px] text-white shadow-xs border border-white/30 overflow-hidden bg-slate-800 relative`}
               style={{
-                background: `linear-gradient(135deg, hsl(${hue},65%,45%), hsl(${hue},75%,30%))`,
+                background: !avatarUrl ? `linear-gradient(135deg, hsl(${hue},65%,45%), hsl(${hue},75%,30%))` : undefined,
               }}
             >
-              {initials}
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={card.channel}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover rounded-full"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.parentElement?.querySelector('.avatar-fallback');
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <span
+                className="avatar-fallback w-full h-full items-center justify-center"
+                style={{ display: avatarUrl ? 'none' : 'flex' }}
+              >
+                {initials}
+              </span>
             </div>
 
             {/* YouTuber Name */}
@@ -341,16 +365,6 @@ export default function CardItem({
               </span>
             </div>
           </div>
-
-          {/* Subline with Creator certification */}
-          <div className="flex items-center justify-between px-1 mt-1 text-slate-400">
-            <span className={`font-mono font-bold truncate text-amber-400/90 ${sizeConfig.subline}`}>
-              ★ {card.channel}
-            </span>
-            <span className={`font-mono font-medium uppercase tracking-wider shrink-0 text-slate-400 ${sizeConfig.subline}`}>
-              YouTube France
-            </span>
-          </div>
         </div>
 
         {/* ── 3. VIDEO TITLE ── */}
@@ -365,14 +379,14 @@ export default function CardItem({
 
         {/* ── 4. ENGAGEMENT REACTOR (Unique Creator Metrics) ── */}
         <div className="relative z-10 space-y-1 my-1 p-1.5 rounded-xl bg-black/40 border border-white/10">
-          {/* Engagement: Likes */}
+          {/* Engagement: Like */}
           <div className="flex items-center justify-between gap-1 text-left">
             <div className="flex items-center gap-1.5 min-w-0">
               <div className="w-4 h-4 rounded-md bg-rose-500/20 border border-rose-500/40 flex items-center justify-center">
                 <Heart className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
               </div>
               <span className={`font-['Outfit'] font-bold text-slate-300 uppercase tracking-wider ${sizeConfig.statLabel}`}>
-                Engagement (Likes)
+                Like
               </span>
             </div>
             <span className={`font-mono font-black text-rose-400 ${sizeConfig.statValue}`}>
@@ -380,14 +394,14 @@ export default function CardItem({
             </span>
           </div>
 
-          {/* Resonance: Comments */}
+          {/* Resonance: Comms */}
           <div className="flex items-center justify-between gap-1 text-left">
             <div className="flex items-center gap-1.5 min-w-0">
               <div className="w-4 h-4 rounded-md bg-sky-500/20 border border-sky-500/40 flex items-center justify-center">
                 <MessageSquare className="w-2.5 h-2.5 text-sky-400" />
               </div>
               <span className={`font-['Outfit'] font-bold text-slate-300 uppercase tracking-wider ${sizeConfig.statLabel}`}>
-                Résonance (Comms)
+                Comms
               </span>
             </div>
             <span className={`font-mono font-black text-sky-400 ${sizeConfig.statValue}`}>
@@ -396,38 +410,16 @@ export default function CardItem({
           </div>
         </div>
 
-        {/* ── 5. FOOTER: Collector Serial, Holo Security Seal & Multiplier ── */}
-        <div className="relative z-10 flex items-center justify-between pt-1 border-t border-white/10 font-mono text-slate-400 text-[8.5px]">
-          {/* Micro holo seal */}
-          <div className="flex items-center gap-1.5">
-            <div
-              className="w-2.5 h-2.5 rounded-xs border shadow-xs"
-              style={{
-                background: `linear-gradient(135deg, ${rarity.sealColor}, #ffffff)`,
-                borderColor: rarity.sealColor,
-              }}
-            />
-            <span className="font-bold text-slate-300">GT-FR</span>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {count > 1 && (
-              <span className="px-1.5 py-0.2 rounded-full font-black bg-yellow-400 text-yellow-950 text-[8px] font-mono">
-                x{count}
-              </span>
-            )}
-            <span className="font-mono font-black text-slate-300">
-              #{String(card.id).padStart(3, '0')}
-            </span>
-            <span
-              className="font-black text-[10px]"
-              style={{ color: rarity.sealColor }}
-              title={rarity.label}
-            >
-              {rarity.symbol}
+        {/* ── 5. FOOTER: Multiplier if count > 1 ── */}
+        {count > 1 ? (
+          <div className="relative z-10 flex items-center justify-end pt-1 font-mono">
+            <span className="px-2 py-0.5 rounded-full font-black bg-yellow-400 text-yellow-950 text-[9px] font-mono shadow-xs border border-yellow-200">
+              x{count}
             </span>
           </div>
-        </div>
+        ) : (
+          <div className="h-0.5" />
+        )}
       </div>
     </div>
   );

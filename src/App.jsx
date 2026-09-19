@@ -11,6 +11,7 @@ import CombatView from './components/CombatView';
 import { getMuteState, playHoloShineSound } from './utils/audio';
 import { ACHIEVEMENTS, checkNewAchievements, computeReward } from './utils/achievements';
 import { BOOSTER_PRICES, dailyRewardAmount } from './utils/gameConfig';
+import { registerChannelAvatars } from './utils/channelAvatars';
 
 function checkIsAdmin() {
   if (typeof window === 'undefined') return false;
@@ -41,6 +42,7 @@ const DEFAULT_PLAYER = {
     flawlessWins: 0,
     ultimatesUsed: 0,
   },
+  cardUsageToday:       {},
 };
 
 // ── Pure helpers ──────────────────────────────────────────────────────────────
@@ -95,6 +97,7 @@ function loadPlayerData() {
       achievements:         saved.achievements         || {},
       boostersOpenedByType: { ...DEFAULT_PLAYER.boostersOpenedByType, ...(saved.boostersOpenedByType || {}) },
       battleStats:          { ...DEFAULT_PLAYER.battleStats,          ...(saved.battleStats || {}) },
+      cardUsageToday:       saved.cardUsageToday       || {},
     };
   } catch {
     return { ...DEFAULT_PLAYER };
@@ -143,6 +146,7 @@ export default function App() {
   const [packsOpened,          setPacksOpened]          = useState(() => loadPlayerData().packsOpened);
   const [boostersOpenedByType, setBoostersOpenedByType] = useState(() => loadPlayerData().boostersOpenedByType);
   const [battleStats,          setBattleStats]          = useState(() => loadPlayerData().battleStats);
+  const [cardUsageToday,       setCardUsageToday]       = useState(() => loadPlayerData().cardUsageToday || {});
 
   // Channel stats — fetched once from server
   const [channelStats, setChannelStats] = useState([]);
@@ -201,7 +205,12 @@ export default function App() {
   const fetchChannels = useCallback(() => {
     fetch('/api/channels')
       .then(r => r.json())
-      .then(data => { if (Array.isArray(data)) setChannelStats(data); })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setChannelStats(data);
+          registerChannelAvatars(data);
+        }
+      })
       .catch(e => console.warn('Erreur chargement chaînes:', e));
   }, []);
 
@@ -300,15 +309,27 @@ export default function App() {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY_PLAYER, JSON.stringify({
-        coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType, battleStats,
+        coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType, battleStats, cardUsageToday,
       }));
     } catch (e) { console.warn('Erreur sauvegarde player:', e); }
-  }, [coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType, battleStats]);
+  }, [coins, boosters, achievements, loginStreak, lastLoginDate, packsOpened, boostersOpenedByType, battleStats, cardUsageToday]);
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY_COLLECTION, JSON.stringify(collection)); }
     catch (e) { console.warn('Erreur sauvegarde collection:', e); }
   }, [collection]);
+
+  const handleRecordCardUsage = useCallback((usedCardIds) => {
+    if (!Array.isArray(usedCardIds) || usedCardIds.length === 0) return;
+    const today = todayISO();
+    setCardUsageToday(prev => {
+      const next = { ...prev };
+      for (const id of usedCardIds) {
+        next[id] = today;
+      }
+      return next;
+    });
+  }, []);
 
   // ── Economy actions ───────────────────────────────────────────────────────
   const handleBuyBooster = useCallback((type) => {
@@ -434,7 +455,7 @@ export default function App() {
           setIsMuted={setIsMuted}
         />
 
-        <main className="flex-1 w-full pb-16">
+        <main className={`flex-1 w-full ${activeTab === 'combat' ? 'pb-2' : 'pb-16'}`}>
           {activeTab === 'booster' && (
             <BoosterOpening
               coins={coins}
@@ -460,6 +481,8 @@ export default function App() {
               collection={collection}
               coins={coins}
               battleStats={battleStats}
+              cardUsageToday={cardUsageToday}
+              onRecordCardUsage={handleRecordCardUsage}
               onRewardCoins={(amt) => {
                 setCoins(c => c + amt);
                 addToast({
