@@ -5,12 +5,13 @@ import CardItem, { RARITY_CONFIG } from './CardItem';
 import { playTearSound, playCardSlideSound, playHoloShineSound, playMythicFanfare, playClickSound } from '../utils/audio';
 import { BOOSTER_PRICES } from '../utils/gameConfig';
 
-// ── 6 Booster Packs Configuration ─────────────────────────────────────────────
+// ── 6 Booster Packs Configuration (2 Trios : 5 Cartes & 7 Cartes) ───────────────
 export const BOOSTER_TYPE_CONFIG = {
+  // ── Trio 1 : 5 Cartes (Probas croissantes Tier 1 → Tier 2 → Tier 3) ──
   decouverte: {
     id: 'decouverte',
     name: 'Pack Découverte',
-    series: 'Série Starter • 3 Cartes',
+    series: 'Série Starter • 5 Cartes',
     emoji: '📦',
     icon: Package,
     price: BOOSTER_PRICES.decouverte,
@@ -19,32 +20,15 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(56,189,248,0.35)',
     gradient: 'linear-gradient(150deg, #0369a1 0%, #075985 45%, #082f49 100%)',
     foilColor: '#38bdf8',
-    desc: '3 cartes variées, idéal pour démarrer sa collection à petit prix.',
-    odds: '70% Bronze · 25% Argent · 5% Or',
-    cardCount: 3,
-    badge: 'STARTER (3 CARTES)',
-  },
-  standard: {
-    id: 'standard',
-    name: 'Booster Classique',
-    series: 'Série 1 • YouTube France',
-    emoji: '⚡',
-    icon: Zap,
-    price: BOOSTER_PRICES.standard,
-    accent: '#3b82f6',
-    border: '#60a5fa',
-    glow: 'rgba(59,130,246,0.4)',
-    gradient: 'linear-gradient(150deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%)',
-    foilColor: '#60a5fa',
-    desc: '5 cartes équilibrées couvrant les chaînes majeures françaises.',
-    odds: 'Argent garantie · 20% Or · 4% Ultra/Mythique',
+    desc: '5 cartes variées, idéal pour démarrer sa collection à petit prix.',
+    odds: '68% Bronze · 24% Argent · 6% Or · 2% Ultra+',
     cardCount: 5,
-    badge: 'STANDARD (5 CARTES)',
+    badge: 'STARTER (5 CARTES)',
   },
   gaming: {
     id: 'gaming',
     name: 'Booster Gaming & Défis',
-    series: 'Édition Spéciale Esport & Let\'s Play',
+    series: 'Édition Esport • 5 Cartes',
     emoji: '🎮',
     icon: Flame,
     price: BOOSTER_PRICES.gaming,
@@ -53,32 +37,15 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(168,85,247,0.45)',
     gradient: 'linear-gradient(150deg, #7e22ce 0%, #581c87 45%, #1e1035 100%)',
     foilColor: '#c084fc',
-    desc: '5 cartes axées Gaming, Esport et Défis avec taux holo rehaussé.',
-    odds: 'Cartes ciblées Gaming + 1 Rare Or+ garantie',
+    desc: '5 cartes axées Gaming et Défis avec taux de raretés intermédiaire.',
+    odds: '45% Bronze · 33% Argent · 15% Or · 7% Ultra+',
     cardCount: 5,
-    badge: 'THÉMATIQUE GAMING',
-  },
-  culture: {
-    id: 'culture',
-    name: 'Booster Savoir & Récit',
-    series: 'Édition Vulgarisation & Cinéma',
-    emoji: '💡',
-    icon: BookOpen,
-    price: BOOSTER_PRICES.culture,
-    accent: '#10b981',
-    border: '#34d399',
-    glow: 'rgba(16,185,129,0.45)',
-    gradient: 'linear-gradient(150deg, #047857 0%, #065f46 45%, #022c22 100%)',
-    foilColor: '#34d399',
-    desc: '5 cartes axées Savoir, Storytelling, Enquêtes et Documentaires.',
-    odds: 'Cartes ciblées Culture + 1 Rare Or+ garantie',
-    cardCount: 5,
-    badge: 'THÉMATIQUE SAVOIR',
+    badge: 'AVANCÉ (5 CARTES)',
   },
   viral: {
     id: 'viral',
     name: 'Booster Viral & Tendances',
-    series: 'Édition Millions de Vues',
+    series: 'Édition Hits • 5 Cartes',
     emoji: '🔥',
     icon: Flame,
     price: BOOSTER_PRICES.viral,
@@ -87,15 +54,51 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(234,88,12,0.5)',
     gradient: 'linear-gradient(150deg, #c2410c 0%, #9a3412 45%, #431407 100%)',
     foilColor: '#fb923c',
-    desc: '5 cartes à fort audimat. Ultra Rare garantie et chances de Mythique.',
-    odds: '2 Rares Or · 1 Ultra Rare garantie · 25% Mythique',
+    desc: '5 cartes à fort audimat. Chances maximales de cartes rares et mythiques.',
+    odds: '20% Bronze · 35% Argent · 26% Or · 19% Ultra+',
     cardCount: 5,
-    badge: 'TOP HITS VIRAUX',
+    badge: 'ÉLITE (5 CARTES)',
+  },
+
+  // ── Trio 2 : 7 Cartes (Mêmes probabilités croissantes Tier 1 → Tier 2 → Tier 3) ──
+  standard: {
+    id: 'standard',
+    name: 'Booster Classique',
+    series: 'Série France • 7 Cartes',
+    emoji: '⚡',
+    icon: Zap,
+    price: BOOSTER_PRICES.standard,
+    accent: '#3b82f6',
+    border: '#60a5fa',
+    glow: 'rgba(59,130,246,0.4)',
+    gradient: 'linear-gradient(150deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%)',
+    foilColor: '#60a5fa',
+    desc: '7 cartes variées couvrant l’ensemble des chaînes majeures françaises.',
+    odds: '68% Bronze · 24% Argent · 6% Or · 2% Ultra+',
+    cardCount: 7,
+    badge: 'STARTER (7 CARTES)',
+  },
+  culture: {
+    id: 'culture',
+    name: 'Booster Savoir & Récit',
+    series: 'Édition Savoir • 7 Cartes',
+    emoji: '💡',
+    icon: BookOpen,
+    price: BOOSTER_PRICES.culture,
+    accent: '#10b981',
+    border: '#34d399',
+    glow: 'rgba(16,185,129,0.45)',
+    gradient: 'linear-gradient(150deg, #047857 0%, #065f46 45%, #022c22 100%)',
+    foilColor: '#34d399',
+    desc: '7 cartes axées Savoir et Storytelling avec taux de raretés intermédiaire.',
+    odds: '45% Bronze · 33% Argent · 15% Or · 7% Ultra+',
+    cardCount: 7,
+    badge: 'AVANCÉ (7 CARTES)',
   },
   collector: {
     id: 'collector',
     name: 'Pack Zénith Noir & Or',
-    series: 'Édition Suprême Prestige',
+    series: 'Édition Suprême • 7 Cartes',
     emoji: '👑',
     icon: Crown,
     price: BOOSTER_PRICES.collector,
@@ -104,14 +107,16 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(245,158,11,0.65)',
     gradient: 'linear-gradient(150deg, #78350f 0%, #451a03 35%, #180d01 70%, #000000 100%)',
     foilColor: '#fbbf24',
-    desc: '6 cartes d’élite — Cartes brillantes uniquement ! 40% de chance Mythique.',
-    odds: '2 Rares · 2 Ultras · 40% Mythique Secrète',
-    cardCount: 6,
-    badge: 'PRESTIGE (6 CARTES)',
+    desc: '7 cartes d’élite avec chances maximales de cartes rares et mythiques.',
+    odds: '20% Bronze · 35% Argent · 26% Or · 19% Ultra+',
+    cardCount: 7,
+    badge: 'ÉLITE (7 CARTES)',
   },
 };
 
-export const BOOSTER_TYPES = ['decouverte', 'standard', 'gaming', 'culture', 'viral', 'collector'];
+export const BOOSTER_TRIO_5 = ['decouverte', 'gaming', 'viral'];
+export const BOOSTER_TRIO_7 = ['standard', 'culture', 'collector'];
+export const BOOSTER_TYPES = ['decouverte', 'gaming', 'viral', 'standard', 'culture', 'collector'];
 
 function timeUntilMidnight() {
   const now = new Date();
@@ -137,7 +142,7 @@ function ShopBoosterCard({ cfg, coins, onBuy }) {
         borderColor: hovered ? cfg.border : 'rgba(255,255,255,0.12)',
         boxShadow: hovered ? `0 14px 32px ${cfg.glow}` : '0 6px 20px rgba(0,0,0,0.55)',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        minHeight: 360,
+        minHeight: 375,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -152,30 +157,29 @@ function ShopBoosterCard({ cfg, coins, onBuy }) {
         {/* Shimmer reflection */}
         <div className="absolute inset-0 pack-shimmer opacity-25 pointer-events-none" />
 
-        {/* Brand & Series Header */}
-        <div className="relative z-10 flex items-start justify-between gap-2">
-          <div>
-            <div className="flex items-center gap-1.5 mb-1">
-              <span className="gt-play-emblem w-3.5 h-3.5" />
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-300 font-['Outfit']">
+        {/* 1. Header: Series & Badge + Title */}
+        <div className="relative z-10 space-y-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="gt-play-emblem w-3.5 h-3.5 shrink-0" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-300 font-['Outfit'] truncate">
                 {cfg.series}
               </span>
             </div>
-            <h3 className="text-xl font-black tracking-tight text-white font-['Outfit']">
-              {cfg.name}
-            </h3>
+            <span
+              className="px-2 py-0.5 rounded text-[8.5px] font-black uppercase tracking-wider text-slate-950 font-['Outfit'] shrink-0 shadow"
+              style={{ background: cfg.foilColor }}
+            >
+              {cfg.badge}
+            </span>
           </div>
-
-          <span
-            className="px-2 py-0.5 rounded text-[8.5px] font-black uppercase tracking-wider text-slate-950 font-['Outfit'] shrink-0 shadow"
-            style={{ background: cfg.foilColor }}
-          >
-            {cfg.badge}
-          </span>
+          <h3 className="text-xl font-black tracking-tight text-white font-['Outfit']">
+            {cfg.name}
+          </h3>
         </div>
 
-        {/* Central Pack Artwork Emblem */}
-        <div className="my-5 flex flex-col items-center justify-center relative z-10">
+        {/* 2. Central Pack Artwork Emblem & Description */}
+        <div className="my-4 flex flex-col items-center justify-center relative z-10">
           <div
             className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-2xl border-2 transition-transform duration-300 group-hover:scale-110"
             style={{
@@ -186,14 +190,14 @@ function ShopBoosterCard({ cfg, coins, onBuy }) {
           >
             <span>{cfg.emoji}</span>
           </div>
-          <p className="text-[11px] text-slate-300 text-center font-medium mt-3 px-2 line-clamp-2">
+          <p className="text-[11px] text-slate-300 text-center font-medium mt-3 px-1 line-clamp-2">
             {cfg.desc}
           </p>
         </div>
 
-        {/* Bottom Bar: Odds & Buy button */}
-        <div className="relative z-10 space-y-3 pt-2 border-t border-white/10">
-          <div className="text-[9.5px] font-mono text-slate-400 text-center truncate">
+        {/* 3. Bottom Bar: Framed Odds & Buy button */}
+        <div className="relative z-10 space-y-2.5 pt-2 border-t border-white/10">
+          <div className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-[10px] font-mono text-slate-300 text-center truncate">
             {cfg.odds}
           </div>
 
@@ -224,35 +228,86 @@ function ShopBoosterCard({ cfg, coins, onBuy }) {
 // ── Quick Open Mini Pack in Inventory ─────────────────────────────────────────
 function InventoryBoosterCard({ cfg, count, onOpen }) {
   if (count <= 0) return null;
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div
       onClick={onOpen}
-      className="relative flex flex-col items-center justify-between p-3.5 rounded-2xl cursor-pointer transition-all duration-200 border-2 hover:-translate-y-1 hover:brightness-110 active:scale-95 group shadow-lg"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative flex-shrink-0 w-44 sm:w-48 rounded-2xl flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-300 border-2 select-none group shadow-xl"
       style={{
         background: cfg.gradient,
-        borderColor: cfg.border,
-        boxShadow: `0 8px 20px ${cfg.glow}`,
-        minWidth: 125,
+        borderColor: hovered ? cfg.border : 'rgba(250, 204, 21, 0.45)',
+        boxShadow: hovered 
+          ? `0 16px 36px ${cfg.glow}, 0 0 20px rgba(250, 204, 21, 0.3)` 
+          : '0 8px 24px rgba(0,0,0,0.6)',
+        transform: hovered ? 'translateY(-6px) scale(1.02)' : 'translateY(0) scale(1)',
       }}
     >
-      <span
-        className="absolute -top-2.5 -right-2.5 px-2 py-0.5 rounded-full text-xs font-black text-slate-950 font-mono shadow-lg border-2 border-[#0a0e1a]"
-        style={{ background: cfg.foilColor }}
-      >
-        x{count}
-      </span>
+      {/* Top crimped seal */}
+      <div className="w-full h-3.5 booster-crimp border-b border-black/40 flex items-center justify-center">
+        <div className="w-8 h-1 rounded-full bg-white/25" />
+      </div>
 
-      <span className="text-3xl my-1 group-hover:scale-110 transition-transform">{cfg.emoji}</span>
-      <p className="font-black text-xs text-white tracking-tight font-['Outfit'] text-center truncate w-full">
-        {cfg.name}
-      </p>
+      {/* Pack body */}
+      <div className="p-4 flex-1 flex flex-col justify-between relative overflow-hidden">
+        {/* Shimmer reflection */}
+        <div className="absolute inset-0 pack-shimmer opacity-30 pointer-events-none" />
 
-      <div
-        className="w-full mt-2 py-1 rounded-lg text-center text-[10px] font-black uppercase tracking-wider text-slate-950 font-['Outfit']"
-        style={{ background: cfg.foilColor }}
-      >
-        Ouvrir
+        {/* Top Badges Row: Card count tag & Big Quantity counter */}
+        <div className="relative z-10 flex items-center justify-between gap-1 mb-2">
+          <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-black/40 border border-white/15 text-slate-200 font-mono">
+            {cfg.cardCount} cartes
+          </span>
+
+          <span
+            className="px-2.5 py-0.5 rounded-full text-xs font-black text-slate-950 font-mono shadow-md border-2 border-[#0a0e1a] animate-pulse"
+            style={{ background: cfg.foilColor }}
+          >
+            x{count}
+          </span>
+        </div>
+
+        {/* Center Artwork Emblem */}
+        <div className="my-2 flex flex-col items-center justify-center relative z-10">
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-xl border-2 transition-transform duration-300 group-hover:scale-110"
+            style={{
+              background: 'radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.55) 100%)',
+              borderColor: cfg.border,
+              boxShadow: `0 0 20px ${cfg.glow}`,
+            }}
+          >
+            <span>{cfg.emoji}</span>
+          </div>
+
+          <h4 className="font-black text-sm text-white tracking-tight font-['Outfit'] text-center mt-2.5 truncate w-full">
+            {cfg.name}
+          </h4>
+          <p className="text-[9.5px] font-mono text-slate-300 text-center truncate w-full mt-0.5 opacity-90">
+            {cfg.badge}
+          </p>
+        </div>
+
+        {/* Action Button: Rip pack */}
+        <div className="relative z-10 mt-3">
+          <div
+            className="w-full py-2 rounded-xl text-center text-xs font-black uppercase tracking-wider text-slate-950 font-['Outfit'] flex items-center justify-center gap-1.5 shadow-lg group-hover:brightness-110 transition-all"
+            style={{ 
+              background: cfg.foilColor,
+              boxShadow: `0 4px 14px ${cfg.glow}`
+            }}
+          >
+            <Zap className="w-3.5 h-3.5 fill-current" />
+            <span>Ouvrir</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom crimped seal */}
+      <div className="w-full h-3.5 booster-crimp border-t border-black/40 flex items-center justify-center">
+        <div className="w-8 h-1 rounded-full bg-white/20" />
       </div>
     </div>
   );
@@ -452,16 +507,48 @@ export default function BoosterOpening({
             </div>
           )}
 
-          {/* Inventory: Opened Boosters ready to rip */}
+          {/* Inventory: Opened Boosters ready to rip - Highlighted Showcase */}
           {totalOwnedBoosters > 0 && (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-yellow-400" />
-                <h3 className="font-['Outfit'] font-black text-sm text-white uppercase tracking-wider">
-                  Vos Boosters en Réserve ({totalOwnedBoosters})
-                </h3>
+            <div className="relative rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-[#111f3d] via-[#16274e] to-[#0e1933] border-2 border-yellow-400/70 shadow-[0_12px_45px_rgba(250,204,21,0.22)] overflow-hidden space-y-4">
+              {/* Golden Ambient Blur Glow */}
+              <div className="absolute -left-12 -top-12 w-48 h-48 bg-yellow-400/15 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Header */}
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-400" />
+                    </span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-yellow-400 font-['Outfit']">
+                      Prêt à Déballer
+                    </span>
+                  </div>
+                  <h3 className="font-['Outfit'] font-black text-xl sm:text-2xl text-white tracking-wide flex items-center gap-2">
+                    <Package className="w-5 h-5 text-yellow-400" />
+                    <span>Vos Boosters en Réserve</span>
+                  </h3>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Sélectionnez un paquet scellé pour le déchirer et découvrir vos nouvelles cartes.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 self-start sm:self-auto shrink-0">
+                  <div className="px-4 py-2 rounded-2xl bg-[#080e1c] border-2 border-yellow-400/60 text-center shadow-lg">
+                    <div className="font-mono font-black text-2xl text-yellow-400 leading-tight">
+                      {totalOwnedBoosters}
+                    </div>
+                    <div className="text-[8.5px] font-black uppercase tracking-wider text-slate-400 font-['Outfit']">
+                      Booster{totalOwnedBoosters > 1 ? 's' : ''} en Stock
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-3 overflow-x-auto pb-2">
+
+              {/* Cards Gallery */}
+              <div className="relative z-10 flex items-stretch gap-4 overflow-x-auto pb-2 pt-1 scrollbar-thin">
                 {BOOSTER_TYPES.map((type) => (
                   <InventoryBoosterCard
                     key={type}
@@ -474,8 +561,8 @@ export default function BoosterOpening({
             </div>
           )}
 
-          {/* 6 Booster Packs Grid */}
-          <div className="space-y-3">
+          {/* 6 Booster Packs Organised into the Two Trios */}
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-yellow-400" />
@@ -488,15 +575,54 @@ export default function BoosterOpening({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {BOOSTER_TYPES.map((type) => (
-                <ShopBoosterCard
-                  key={type}
-                  cfg={BOOSTER_TYPE_CONFIG[type]}
-                  coins={coins}
-                  onBuy={handleBuy}
-                />
-              ))}
+            {/* Trio 1 : 5 Cartes */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-sm shadow-sky-400/50" />
+                  <h3 className="font-['Outfit'] font-black text-sm text-slate-200 uppercase tracking-wider">
+                    Éditions 5 Cartes
+                  </h3>
+                </div>
+                <span className="text-[11px] font-mono text-slate-400">
+                  3 niveaux de raretés croissantes
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {BOOSTER_TRIO_5.map((type) => (
+                  <ShopBoosterCard
+                    key={type}
+                    cfg={BOOSTER_TYPE_CONFIG[type]}
+                    coins={coins}
+                    onBuy={handleBuy}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Trio 2 : 7 Cartes */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50" />
+                  <h3 className="font-['Outfit'] font-black text-sm text-slate-200 uppercase tracking-wider">
+                    Éditions 7 Cartes
+                  </h3>
+                </div>
+                <span className="text-[11px] font-mono text-slate-400">
+                  3 niveaux de raretés croissantes
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {BOOSTER_TRIO_7.map((type) => (
+                  <ShopBoosterCard
+                    key={type}
+                    cfg={BOOSTER_TYPE_CONFIG[type]}
+                    coins={coins}
+                    onBuy={handleBuy}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -1,44 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { CheckCircle2, ExternalLink, RefreshCw, Sparkles, Award, Swords, Trophy, Lock } from 'lucide-react';
-
-const ARENA_BADGES = [
-  {
-    id: 'easy',
-    name: 'Insigne de l\'Apprenti',
-    rank: 'Rang Bronze',
-    desc: 'Battu l\'Apprenti Tipeee',
-    emoji: '🥉',
-    borderColor: '#94a3b8',
-    bgGradient: 'from-slate-800 to-slate-900',
-  },
-  {
-    id: 'medium',
-    name: 'Insigne du Monteur',
-    rank: 'Rang Argent',
-    desc: 'Battu le Monteur Rythmé',
-    emoji: '🥈',
-    borderColor: '#34d399',
-    bgGradient: 'from-emerald-950 to-slate-900',
-  },
-  {
-    id: 'hard',
-    name: 'Insigne de l\'Algorithme',
-    rank: 'Rang Or',
-    desc: 'Battu l\'Algorithme YouTube',
-    emoji: '🥇',
-    borderColor: '#38bdf8',
-    bgGradient: 'from-sky-950 to-slate-900',
-  },
-  {
-    id: 'boss',
-    name: 'Couronne des Tendances',
-    rank: 'Rang Légendaire',
-    desc: 'Battu le Boss des Tendances',
-    emoji: '👑',
-    borderColor: '#f59e0b',
-    bgGradient: 'from-amber-950 to-slate-900',
-  },
-];
+import { ExternalLink, Sparkles } from 'lucide-react';
 
 function channelHue(name) {
   let h = 0;
@@ -190,13 +151,8 @@ function BadgeCard({ channel, myCount, totalCount, channelUrl, avatarUrl }) {
 export default function BadgesView({ 
   collection = {}, 
   channelStats = [], 
-  onRefreshChannels,
-  battleStats = {},
-  onOpenCombatTab 
 }) {
-  const [filter, setFilter]           = useState('ALL');
-  const [isEnriching, setIsEnriching] = useState(false);
-  const [enrichMessage, setEnrichMessage] = useState('');
+  const [filter, setFilter] = useState('ALL');
 
   const myCountPerChannel = useMemo(() => {
     const counts = {};
@@ -235,27 +191,6 @@ export default function BadgesView({
     return list;
   }, [channels, filter]);
 
-  const handleEnrich = async () => {
-    setIsEnriching(true);
-    setEnrichMessage('Recherche des icônes YouTube officielles en cours...');
-    try {
-      const res = await fetch('/api/channels/enrich', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ limit: 40 }),
-      });
-      const data = await res.json();
-      setEnrichMessage(`+${data.enrichedCount || 0} icônes récupérées !`);
-      if (onRefreshChannels) onRefreshChannels();
-      setTimeout(() => setEnrichMessage(''), 4000);
-    } catch {
-      setEnrichMessage('Erreur lors de la récupération.');
-      setTimeout(() => setEnrichMessage(''), 4000);
-    } finally {
-      setIsEnriching(false);
-    }
-  };
-
   const FILTERS = [
     { id: 'ALL',         label: 'Toutes les Chaînes',   count: channels.length },
     { id: 'EARNED',      label: 'Médaillons Décrochés', count: earnedCount },
@@ -285,16 +220,6 @@ export default function BadgesView({
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={handleEnrich}
-              disabled={isEnriching}
-              className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-[#111c36] border border-blue-900/70 text-slate-200 hover:text-white flex items-center gap-2 transition-colors disabled:opacity-50"
-              title="Mettre à jour les logos YouTube"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isEnriching ? 'animate-spin text-yellow-400' : ''}`} />
-              <span>{isEnriching ? 'Chargement...' : 'Actualiser Logos'}</span>
-            </button>
-
             <div className="px-5 py-3 rounded-2xl bg-[#090e1c] border-2 border-yellow-500/50 text-center shadow-lg">
               <div className="font-mono font-black text-3xl text-yellow-400">
                 {earnedCount}
@@ -307,80 +232,6 @@ export default function BadgesView({
           </div>
         </div>
       </div>
-
-      {/* ── Arena Champions Badges Section ── */}
-      <div className="p-5 rounded-2xl bg-gradient-to-b from-[#0e172a] to-[#0a101f] border-2 border-slate-800 shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-          <div className="flex items-center gap-2">
-            <Swords className="w-4 h-4 text-amber-400" />
-            <h2 className="text-base font-black text-white font-['Outfit']">
-              Médaillons de l'Arène TCG
-            </h2>
-          </div>
-          <div className="flex items-center gap-3 text-xs font-mono">
-            <span className="text-slate-400">Victoires : <strong className="text-emerald-400">{battleStats.battlesWon || 0}</strong></span>
-            <span className="text-slate-500">•</span>
-            <span className="text-slate-400">Combats : <strong className="text-white">{battleStats.battlesPlayed || 0}</strong></span>
-            {onOpenCombatTab && (
-              <button
-                onClick={onOpenCombatTab}
-                className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 text-[11px] font-bold transition-colors cursor-pointer"
-              >
-                Combattre ⚔️
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {ARENA_BADGES.map((badge) => {
-            const isEarned = (battleStats.difficultiesDefeated || []).includes(badge.id);
-
-            return (
-              <div
-                key={badge.id}
-                className={`p-3.5 rounded-xl border-2 transition-all relative overflow-hidden flex items-center gap-3 ${
-                  isEarned
-                    ? `bg-gradient-to-r ${badge.bgGradient} border-yellow-400/80 shadow-md shadow-yellow-400/10`
-                    : 'bg-slate-900/40 border-slate-800/80 opacity-55'
-                }`}
-              >
-                <div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 border-2 shadow-inner ${
-                    isEarned ? 'border-amber-400 bg-amber-400/20' : 'border-slate-800 bg-slate-900'
-                  }`}
-                >
-                  {isEarned ? badge.emoji : <Lock className="w-5 h-5 text-slate-600" />}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-black uppercase tracking-wider text-amber-400 font-mono">
-                      {badge.rank}
-                    </span>
-                    {isEarned && (
-                      <span className="text-[8px] font-black px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                        CONQUIS
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={`font-black text-xs truncate ${isEarned ? 'text-white' : 'text-slate-400'}`}>
-                    {badge.name}
-                  </h3>
-                  <p className="text-[10px] text-slate-400 truncate">{badge.desc}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {enrichMessage && (
-        <div className="flex items-center gap-2 p-3 rounded-xl text-xs text-yellow-300 bg-yellow-950/40 border border-yellow-700/60 shadow">
-          <Sparkles className="w-4 h-4 text-yellow-400" />
-          <span>{enrichMessage}</span>
-        </div>
-      )}
 
       {/* Global League Progress */}
       <div className="space-y-1.5">

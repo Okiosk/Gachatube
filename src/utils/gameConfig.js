@@ -1,14 +1,14 @@
 // ── Booster prices in TubeCoins (TC) ──────────────────────────────────────────
 export const BOOSTER_PRICES = {
-  decouverte: 3,   // 3 cartes, idéal pour débuter
-  standard:   6,   // 5 cartes classiques équilibrées
-  gaming:     10,  // 5 cartes axées Gaming, Esport & Défis
-  culture:    10,  // 5 cartes axées Savoir, Vulgarisation & Cinéma
-  viral:      14,  // 5 cartes à gros audimat & Rares boostées
-  collector:  32,  // 6 cartes d'élite, foils garanties & chances mythiques
+  decouverte: 4,   // 5 cartes • Tier 1 Starter
+  gaming:     8,   // 5 cartes • Tier 2 Avancé
+  viral:      14,  // 5 cartes • Tier 3 Élite
+  standard:   6,   // 7 cartes • Tier 1 Starter
+  culture:    12,  // 7 cartes • Tier 2 Avancé
+  collector:  20,  // 7 cartes • Tier 3 Élite
   // Aliases for backward compatibility
   premium:    14,
-  mythic:     32,
+  mythic:     20,
 };
 
 // ── Daily reward calculation ──────────────────────────────────────────────────

@@ -502,9 +502,6 @@ export default function App() {
             <BadgesView
               collection={collection}
               channelStats={channelStats}
-              onRefreshChannels={fetchChannels}
-              battleStats={battleStats}
-              onOpenCombatTab={() => setActiveTab('combat')}
             />
           )}
 

@@ -178,99 +178,107 @@ export function drawBoosterPack() {
   };
 }
 
+const BOOSTER_SERVER_CONFIG = {
+  decouverte: { cardCount: 5, tier: 1 },
+  gaming:     { cardCount: 5, tier: 2, categories: ['Gaming', 'Humour', 'Divertissement'] },
+  viral:      { cardCount: 5, tier: 3 },
+  premium:    { cardCount: 5, tier: 3 },
+
+  standard:   { cardCount: 7, tier: 1 },
+  culture:    { cardCount: 7, tier: 2, categories: ['Savoir', 'Storytelling', 'Culte', 'Actualités'] },
+  collector:  { cardCount: 7, tier: 3 },
+  mythic:     { cardCount: 7, tier: 3 },
+};
+
+function rollRarityForTier(tier) {
+  const roll = Math.random() * 100;
+  if (tier === 1) {
+    if (roll < 0.2) return 'MYTHIQUE';
+    if (roll < 2.0) return 'ULTRA_RARE';
+    if (roll < 8.0) return 'RARE';
+    if (roll < 32.0) return 'PEU_COMMUNE';
+    return 'COMMUNE';
+  } else if (tier === 2) {
+    if (roll < 1.5) return 'MYTHIQUE';
+    if (roll < 7.0) return 'ULTRA_RARE';
+    if (roll < 22.0) return 'RARE';
+    if (roll < 55.0) return 'PEU_COMMUNE';
+    return 'COMMUNE';
+  } else {
+    // tier === 3
+    if (roll < 5.0) return 'MYTHIQUE';
+    if (roll < 19.0) return 'ULTRA_RARE';
+    if (roll < 45.0) return 'RARE';
+    if (roll < 80.0) return 'PEU_COMMUNE';
+    return 'COMMUNE';
+  }
+}
+
 /**
- * Open a booster pack by type — supports 6 distinct booster pack formulas
+ * Open a booster pack by type — supports two trios (5 cards & 7 cards) with increasing probability tiers
  * @param {'decouverte'|'standard'|'viral'|'gaming'|'culture'|'collector'|'premium'|'mythic'} type
  */
 export function drawBoosterPackByType(type = 'standard') {
+  const cfg = BOOSTER_SERVER_CONFIG[type] || BOOSTER_SERVER_CONFIG.standard;
+  const targetCount = cfg.cardCount;
+  const tier = cfg.tier;
+
   const total = getTotalVideosCount();
   if (total === 0) return { isGodPack: false, cards: [] };
-
-  const targetCount = type === 'decouverte' ? 3 : type === 'collector' || type === 'mythic' ? 6 : 5;
 
   if (total < targetCount) {
     const cards = db.prepare('SELECT * FROM videos ORDER BY RANDOM() LIMIT ?').all(total);
     return { isGodPack: false, cards };
   }
 
-  let pack = [];
+  const pack = [];
+  const pickedIds = new Set();
 
-  if (type === 'decouverte') {
-    // 3 cartes : 2 Communes + 1 Peu Commune (ou Rare à 15%)
-    const commons = db.prepare(`SELECT * FROM videos WHERE rarity = 'COMMUNE' ORDER BY RANDOM() LIMIT 2`).all();
-    const isRare = Math.random() < 0.15;
-    const special = db.prepare(`SELECT * FROM videos WHERE rarity = ? ORDER BY RANDOM() LIMIT 1`).get(isRare ? 'RARE' : 'PEU_COMMUNE');
-    pack = [...commons, special].filter(Boolean);
+  for (let i = 0; i < targetCount; i++) {
+    const rarity = rollRarityForTier(tier);
+    let card = null;
 
-  } else if (type === 'standard') {
-    // 5 cartes : 2 Communes + 2 Peu Communes + 1 Climax (80% Rare, 16% Ultra, 4% Mythique)
-    const commons   = db.prepare(`SELECT * FROM videos WHERE rarity = 'COMMUNE'     ORDER BY RANDOM() LIMIT 2`).all();
-    const uncommons = db.prepare(`SELECT * FROM videos WHERE rarity = 'PEU_COMMUNE' ORDER BY RANDOM() LIMIT 2`).all();
+    const notInClause = pickedIds.size > 0 
+      ? `AND id NOT IN (${Array.from(pickedIds).join(',')})` 
+      : '';
 
-    const roll = Math.random();
-    const climaxRarity = roll < 0.04 ? 'MYTHIQUE' : roll < 0.20 ? 'ULTRA_RARE' : 'RARE';
-    let climax = db.prepare(`SELECT * FROM videos WHERE rarity = ? ORDER BY RANDOM() LIMIT 1`).get(climaxRarity);
-    if (!climax) climax = db.prepare(`SELECT * FROM videos WHERE rarity = 'RARE' ORDER BY RANDOM() LIMIT 1`).get();
-
-    pack = [...commons, ...uncommons, climax].filter(Boolean);
-
-  } else if (type === 'gaming') {
-    // 5 cartes axées Gaming & Divertissement : 2 de base + 2 intermédiaires + 1 spéciale Rare/Ultra
-    const base = db.prepare(`SELECT * FROM videos WHERE category IN ('Gaming', 'Humour', 'Divertissement') AND rarity IN ('COMMUNE', 'PEU_COMMUNE') ORDER BY RANDOM() LIMIT 3`).all();
-    const rare = db.prepare(`SELECT * FROM videos WHERE category IN ('Gaming', 'Humour', 'Divertissement') AND rarity IN ('RARE', 'ULTRA_RARE') ORDER BY RANDOM() LIMIT 1`).get();
-    const specialRoll = Math.random() < 0.10 ? 'MYTHIQUE' : 'ULTRA_RARE';
-    let special = db.prepare(`SELECT * FROM videos WHERE rarity = ? ORDER BY RANDOM() LIMIT 1`).get(specialRoll);
-
-    pack = [...base, rare, special].filter(Boolean);
-
-  } else if (type === 'culture') {
-    // 5 cartes axées Savoir, Storytelling & Cinéma
-    const base = db.prepare(`SELECT * FROM videos WHERE category IN ('Savoir', 'Storytelling', 'Culte', 'Actualités') AND rarity IN ('COMMUNE', 'PEU_COMMUNE') ORDER BY RANDOM() LIMIT 3`).all();
-    const rare = db.prepare(`SELECT * FROM videos WHERE category IN ('Savoir', 'Storytelling', 'Culte', 'Actualités') AND rarity IN ('RARE', 'ULTRA_RARE') ORDER BY RANDOM() LIMIT 1`).get();
-    const specialRoll = Math.random() < 0.10 ? 'MYTHIQUE' : 'ULTRA_RARE';
-    let special = db.prepare(`SELECT * FROM videos WHERE rarity = ? ORDER BY RANDOM() LIMIT 1`).get(specialRoll);
-
-    pack = [...base, rare, special].filter(Boolean);
-
-  } else if (type === 'viral' || type === 'premium') {
-    // 5 cartes : 1 Peu Commune · 2 Rares · 1 Ultra Rare garantie · 1 Spéciale (25% Mythique, 75% Ultra)
-    const uncommons = db.prepare(`SELECT * FROM videos WHERE rarity = 'PEU_COMMUNE' ORDER BY RANDOM() LIMIT 1`).all();
-    const rares     = db.prepare(`SELECT * FROM videos WHERE rarity = 'RARE'        ORDER BY RANDOM() LIMIT 2`).all();
-    const ultra     = db.prepare(`SELECT * FROM videos WHERE rarity = 'ULTRA_RARE'  ORDER BY RANDOM() LIMIT 1`).get();
-
-    const specialRarity = Math.random() < 0.25 ? 'MYTHIQUE' : 'ULTRA_RARE';
-    let special = db.prepare(`SELECT * FROM videos WHERE rarity = ? ORDER BY RANDOM() LIMIT 1`).get(specialRarity);
-    if (!special) special = db.prepare(`SELECT * FROM videos WHERE rarity IN ('ULTRA_RARE','MYTHIQUE') ORDER BY RANDOM() LIMIT 1`).get();
-
-    pack = [...uncommons, ...rares, ultra, special].filter(Boolean);
-
-  } else if (type === 'collector' || type === 'mythic') {
-    // 6 cartes d'élite : 2 Rares · 2 Ultra Rares · 2 Spéciales (40% Mythique chacune)
-    const rares     = db.prepare(`SELECT * FROM videos WHERE rarity = 'RARE'        ORDER BY RANDOM() LIMIT 2`).all();
-    const ultras    = db.prepare(`SELECT * FROM videos WHERE rarity = 'ULTRA_RARE'  ORDER BY RANDOM() LIMIT 2`).all();
-
-    const specials = [];
-    for (let i = 0; i < 2; i++) {
-      const specialRarity = Math.random() < 0.40 ? 'MYTHIQUE' : 'ULTRA_RARE';
-      let s = db.prepare(`SELECT * FROM videos WHERE rarity = ? ORDER BY RANDOM() LIMIT 1`).get(specialRarity);
-      if (!s) s = db.prepare(`SELECT * FROM videos WHERE rarity IN ('ULTRA_RARE','MYTHIQUE') ORDER BY RANDOM() LIMIT 1`).get();
-      if (s) specials.push(s);
+    // Thematic boost if category specified
+    if (cfg.categories && cfg.categories.length > 0) {
+      const placeholders = cfg.categories.map(() => '?').join(',');
+      card = db.prepare(`
+        SELECT * FROM videos 
+        WHERE rarity = ? AND category IN (${placeholders}) ${notInClause}
+        ORDER BY RANDOM() LIMIT 1
+      `).get(rarity, ...cfg.categories);
     }
 
-    pack = [...rares, ...ultras, ...specials].filter(Boolean);
+    // Standard draw by rolled rarity
+    if (!card) {
+      card = db.prepare(`
+        SELECT * FROM videos 
+        WHERE rarity = ? ${notInClause}
+        ORDER BY RANDOM() LIMIT 1
+      `).get(rarity);
+    }
+
+    // Fallback to any remaining unpicked card
+    if (!card) {
+      card = db.prepare(`
+        SELECT * FROM videos 
+        WHERE 1=1 ${notInClause}
+        ORDER BY RANDOM() LIMIT 1
+      `).get();
+    }
+
+    if (card) {
+      pickedIds.add(card.id);
+      pack.push(card);
+    }
   }
 
-  // Pad to targetCount without duplicates if any slot was missing
-  if (pack.length < targetCount) {
-    const existingIds = pack.map((c) => c.id).join(',');
-    const fillers = db
-      .prepare(`SELECT * FROM videos ${existingIds ? `WHERE id NOT IN (${existingIds})` : ''} ORDER BY RANDOM() LIMIT ?`)
-      .all(targetCount - pack.length);
-    pack = [...pack, ...fillers];
-  }
-
-  return { isGodPack: false, cards: pack.slice(0, targetCount) };
+  return { isGodPack: false, cards: pack };
 }
+
 
 /**
  * Get paginated list of cards with search & filters
