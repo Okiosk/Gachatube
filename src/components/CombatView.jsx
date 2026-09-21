@@ -904,12 +904,12 @@ export default function CombatView({
                 onChange={(e) => setFilterRarity(e.target.value)}
                 className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-400 font-mono"
               >
-                <option value="ALL">Toutes les raretés</option>
-                <option value="COMMUNE">Commune</option>
-                <option value="PEU_COMMUNE">Peu Commune</option>
-                <option value="RARE">Rare</option>
-                <option value="ULTRA_RARE">Ultra Rare</option>
-                <option value="MYTHIQUE">Mythique</option>
+                <option value="ALL">Toutes les cartes</option>
+                <option value="COMMUNE">★</option>
+                <option value="PEU_COMMUNE">★★</option>
+                <option value="RARE">★★★</option>
+                <option value="ULTRA_RARE">★★★★</option>
+                <option value="MYTHIQUE">★★★★★</option>
               </select>
             </div>
           </div>
@@ -1499,7 +1499,7 @@ export default function CombatView({
           <div className="space-y-2">
             <h2 className="text-2xl font-black text-white">Défaite... L'Algorithme t'a dominé !</h2>
             <p className="text-slate-400 text-xs leading-relaxed">
-              Toutes tes cartes ont été mises K.O. Améliore ton équipe avec des cartes de rareté supérieure ou tente une autre stratégie !
+              Toutes tes cartes ont été mises K.O. Améliore ton équipe avec des cartes ayant plus d'étoiles ou tente une autre stratégie !
             </p>
           </div>
 

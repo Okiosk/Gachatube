@@ -139,14 +139,14 @@ export default function DatabaseExplorer({ onPlayVideo }) {
             <select
               value={selectedRarity}
               onChange={(e) => { setSelectedRarity(e.target.value); setPage(1); }}
-              className="w-full bg-[#070b16] border border-slate-700 text-slate-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amber-400"
+              className="w-full bg-[#070b16] border border-slate-700 text-slate-200 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-amber-400 font-mono"
             >
-              <option value="">Toutes les raretés</option>
-              <option value="MYTHIQUE">👑 Mythique Prisme Noir</option>
-              <option value="ULTRA_RARE">✨ Ultra Rare Cosmique</option>
-              <option value="RARE">★ Rare Saphir Holo</option>
-              <option value="PEU_COMMUNE">◆ Peu Commune Émeraude</option>
-              <option value="COMMUNE">● Commune Titane</option>
+              <option value="">Toutes les cartes</option>
+              <option value="MYTHIQUE">★★★★★</option>
+              <option value="ULTRA_RARE">★★★★</option>
+              <option value="RARE">★★★</option>
+              <option value="PEU_COMMUNE">★★</option>
+              <option value="COMMUNE">★</option>
             </select>
           </div>
         </div>

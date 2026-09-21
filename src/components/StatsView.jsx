@@ -3,11 +3,11 @@ import { BarChart3, TrendingUp, Tv, Shield, Sparkles, Flame, Crown, Clock, Award
 import { formatNumber } from './CardItem';
 
 const RARITY_DISPLAY = [
-  { key: 'COMMUNE',     label: 'Commune',    badge: '● Titane',       color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: '#64748b', energy: '⚙️ Titane Slate',        sub: 'Édition Régulière' },
-  { key: 'PEU_COMMUNE', label: 'Peu Comm.',  badge: '◆ Émeraude',     color: '#34d399', bg: 'rgba(52,211,153,0.1)',  border: '#10b981', energy: '💎 Cyber Émeraude',      sub: 'Palier Intermédiaire' },
-  { key: 'RARE',        label: 'Rare',       badge: '★ Saphir Holo',  color: '#38bdf8', bg: 'rgba(56,189,248,0.1)',  border: '#0284c7', energy: '🔷 Saphir Holographique', sub: 'Top 20% Vues' },
-  { key: 'ULTRA_RARE',  label: 'Ultra Rare', badge: '✨ Cosmique',     color: '#c084fc', bg: 'rgba(192,132,252,0.1)', border: '#9333ea', energy: '🔮 Améthyste Cosmique',  sub: 'Top 5% Tendance' },
-  { key: 'MYTHIQUE',    label: 'Mythique',   badge: '👑 Prisme Noir', color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', border: '#d97706', energy: '🔥 Or & Prisme Noir',    sub: 'Top 1% Légendaire' },
+  { key: 'COMMUNE',     label: '★',       badge: '★',       color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: '#64748b', energy: '1★', sub: '1 Étoile' },
+  { key: 'PEU_COMMUNE', label: '★★',      badge: '★★',      color: '#34d399', bg: 'rgba(52,211,153,0.1)',  border: '#10b981', energy: '2★', sub: '2 Étoiles' },
+  { key: 'RARE',        label: '★★★',     badge: '★★★',     color: '#38bdf8', bg: 'rgba(56,189,248,0.1)',  border: '#0284c7', energy: '3★', sub: '3 Étoiles' },
+  { key: 'ULTRA_RARE',  label: '★★★★',    badge: '★★★★',    color: '#c084fc', bg: 'rgba(192,132,252,0.1)', border: '#9333ea', energy: '4★', sub: '4 Étoiles' },
+  { key: 'MYTHIQUE',    label: '★★★★★',   badge: '★★★★★',   color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', border: '#d97706', energy: '5★', sub: '5 Étoiles' },
 ];
 
 export default function StatsView({ onPlayVideo }) {
@@ -93,7 +93,7 @@ export default function StatsView({ onPlayVideo }) {
       {/* ── Rarity Grid (Creator TCG Tier distribution) ── */}
       <div className="space-y-2">
         <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 font-['Outfit'] flex items-center gap-2 px-1">
-          <span>⚡ Répartition par Niveau de Rareté TCG</span>
+          <span>⚡ Répartition par Étoiles</span>
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {RARITY_DISPLAY.map(r => {
@@ -144,7 +144,7 @@ export default function StatsView({ onPlayVideo }) {
                 <h3 className="font-['Outfit'] font-black text-base text-white tracking-wide">
                   Temple de la Renommée
                 </h3>
-                <p className="text-[10px] font-mono text-slate-400">Cartes Légendaires aux PV / Vues les plus élevées</p>
+                <p className="text-[10px] font-mono text-slate-400">Cartes aux PV / Vues les plus élevées</p>
               </div>
             </div>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-yellow-400/10 text-yellow-400 border border-yellow-400/30">

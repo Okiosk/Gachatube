@@ -749,7 +749,7 @@ export default function AdminView({ onBackToGame, onPlayVideo }) {
             <div className="p-4 rounded-xl bg-[#0c1427] border border-slate-800 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-black uppercase text-amber-400">Catalogue National des Cartes</h2>
-                <p className="text-xs text-slate-400">Explorez l'intégralité des cartes réelles en base de données, filtrez par rareté et par créateur.</p>
+                <p className="text-xs text-slate-400">Explorez l'intégralité des cartes réelles en base de données, filtrez par étoiles et par créateur.</p>
               </div>
               <div className="font-mono text-xs text-slate-300 font-bold">
                 Total : {totalVideos} cartes

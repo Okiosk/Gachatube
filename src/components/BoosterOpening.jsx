@@ -7,11 +7,11 @@ import { BOOSTER_PRICES } from '../utils/gameConfig';
 
 // ── 6 Booster Packs Configuration (2 Trios : 5 Cartes & 7 Cartes) ───────────────
 export const BOOSTER_TYPE_CONFIG = {
-  // ── Trio 1 : 5 Cartes (Probas croissantes Tier 1 → Tier 2 → Tier 3) ──
+  // ── Trio 1 : 5 Cartes ──
   decouverte: {
     id: 'decouverte',
-    name: 'Pack Découverte',
-    series: 'Série Starter • 5 Cartes',
+    name: 'Booster Cyan',
+    series: 'Format 5 Cartes',
     emoji: '📦',
     icon: Package,
     price: BOOSTER_PRICES.decouverte,
@@ -20,15 +20,15 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(56,189,248,0.35)',
     gradient: 'linear-gradient(150deg, #0369a1 0%, #075985 45%, #082f49 100%)',
     foilColor: '#38bdf8',
-    desc: '5 cartes variées, idéal pour démarrer sa collection à petit prix.',
-    odds: '68% Bronze · 24% Argent · 6% Or · 2% Ultra+',
+    desc: '5 cartes à collectionner.',
+    odds: '68% ★ · 24% ★★ · 6% ★★★ · 2% ★★★★+',
     cardCount: 5,
-    badge: 'STARTER (5 CARTES)',
+    badge: '5 CARTES',
   },
   gaming: {
     id: 'gaming',
-    name: 'Booster Gaming & Défis',
-    series: 'Édition Esport • 5 Cartes',
+    name: 'Booster Violet',
+    series: 'Format 5 Cartes',
     emoji: '🎮',
     icon: Flame,
     price: BOOSTER_PRICES.gaming,
@@ -37,15 +37,15 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(168,85,247,0.45)',
     gradient: 'linear-gradient(150deg, #7e22ce 0%, #581c87 45%, #1e1035 100%)',
     foilColor: '#c084fc',
-    desc: '5 cartes axées Gaming et Défis avec taux de raretés intermédiaire.',
-    odds: '45% Bronze · 33% Argent · 15% Or · 7% Ultra+',
+    desc: '5 cartes à collectionner avec chances accrues de cartes 3★ et +.',
+    odds: '45% ★ · 33% ★★ · 15% ★★★ · 7% ★★★★+',
     cardCount: 5,
-    badge: 'AVANCÉ (5 CARTES)',
+    badge: '5 CARTES',
   },
   viral: {
     id: 'viral',
-    name: 'Booster Viral & Tendances',
-    series: 'Édition Hits • 5 Cartes',
+    name: 'Booster Orange',
+    series: 'Format 5 Cartes',
     emoji: '🔥',
     icon: Flame,
     price: BOOSTER_PRICES.viral,
@@ -54,17 +54,17 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(234,88,12,0.5)',
     gradient: 'linear-gradient(150deg, #c2410c 0%, #9a3412 45%, #431407 100%)',
     foilColor: '#fb923c',
-    desc: '5 cartes à fort audimat. Chances maximales de cartes rares et mythiques.',
-    odds: '20% Bronze · 35% Argent · 26% Or · 19% Ultra+',
+    desc: '5 cartes à collectionner avec chances maximales de cartes 4★ et 5★.',
+    odds: '20% ★ · 35% ★★ · 26% ★★★ · 19% ★★★★+',
     cardCount: 5,
-    badge: 'ÉLITE (5 CARTES)',
+    badge: '5 CARTES',
   },
 
-  // ── Trio 2 : 7 Cartes (Mêmes probabilités croissantes Tier 1 → Tier 2 → Tier 3) ──
+  // ── Trio 2 : 7 Cartes ──
   standard: {
     id: 'standard',
-    name: 'Booster Classique',
-    series: 'Série France • 7 Cartes',
+    name: 'Booster Bleu',
+    series: 'Format 7 Cartes',
     emoji: '⚡',
     icon: Zap,
     price: BOOSTER_PRICES.standard,
@@ -73,15 +73,15 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(59,130,246,0.4)',
     gradient: 'linear-gradient(150deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%)',
     foilColor: '#60a5fa',
-    desc: '7 cartes variées couvrant l’ensemble des chaînes majeures françaises.',
-    odds: '68% Bronze · 24% Argent · 6% Or · 2% Ultra+',
+    desc: '7 cartes à collectionner.',
+    odds: '68% ★ · 24% ★★ · 6% ★★★ · 2% ★★★★+',
     cardCount: 7,
-    badge: 'STARTER (7 CARTES)',
+    badge: '7 CARTES',
   },
   culture: {
     id: 'culture',
-    name: 'Booster Savoir & Récit',
-    series: 'Édition Savoir • 7 Cartes',
+    name: 'Booster Vert',
+    series: 'Format 7 Cartes',
     emoji: '💡',
     icon: BookOpen,
     price: BOOSTER_PRICES.culture,
@@ -90,15 +90,15 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(16,185,129,0.45)',
     gradient: 'linear-gradient(150deg, #047857 0%, #065f46 45%, #022c22 100%)',
     foilColor: '#34d399',
-    desc: '7 cartes axées Savoir et Storytelling avec taux de raretés intermédiaire.',
-    odds: '45% Bronze · 33% Argent · 15% Or · 7% Ultra+',
+    desc: '7 cartes à collectionner avec chances accrues de cartes 3★ et +.',
+    odds: '45% ★ · 33% ★★ · 15% ★★★ · 7% ★★★★+',
     cardCount: 7,
-    badge: 'AVANCÉ (7 CARTES)',
+    badge: '7 CARTES',
   },
   collector: {
     id: 'collector',
-    name: 'Pack Zénith Noir & Or',
-    series: 'Édition Suprême • 7 Cartes',
+    name: 'Booster Jaune',
+    series: 'Format 7 Cartes',
     emoji: '👑',
     icon: Crown,
     price: BOOSTER_PRICES.collector,
@@ -107,10 +107,10 @@ export const BOOSTER_TYPE_CONFIG = {
     glow: 'rgba(245,158,11,0.65)',
     gradient: 'linear-gradient(150deg, #78350f 0%, #451a03 35%, #180d01 70%, #000000 100%)',
     foilColor: '#fbbf24',
-    desc: '7 cartes d’élite avec chances maximales de cartes rares et mythiques.',
-    odds: '20% Bronze · 35% Argent · 26% Or · 19% Ultra+',
+    desc: '7 cartes à collectionner avec chances maximales de cartes 4★ et 5★.',
+    odds: '20% ★ · 35% ★★ · 26% ★★★ · 19% ★★★★+',
     cardCount: 7,
-    badge: 'ÉLITE (7 CARTES)',
+    badge: '7 CARTES',
   },
 };
 
@@ -585,7 +585,7 @@ export default function BoosterOpening({
                   </h3>
                 </div>
                 <span className="text-[11px] font-mono text-slate-400">
-                  3 niveaux de raretés croissantes
+                  3 niveaux de probabilités croissantes
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -610,7 +610,7 @@ export default function BoosterOpening({
                   </h3>
                 </div>
                 <span className="text-[11px] font-mono text-slate-400">
-                  3 niveaux de raretés croissantes
+                  3 niveaux de probabilités croissantes
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -724,18 +724,18 @@ export default function BoosterOpening({
                   <span className="text-slate-500 font-normal"> / {cards.length}</span>
                 </span>
                 {currentCard?.rarity === 'MYTHIQUE' && (
-                  <span className="text-[10px] font-black text-amber-300 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-500 animate-pulse shadow-md shadow-amber-500/30">
-                    👑 PRISME NOIR & OR !
+                  <span className="text-[10px] font-black text-amber-300 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-500 animate-pulse shadow-md shadow-amber-500/30 font-mono tracking-wider">
+                    ★★★★★
                   </span>
                 )}
                 {currentCard?.rarity === 'ULTRA_RARE' && (
-                  <span className="text-[10px] font-black text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-500 shadow-md shadow-purple-500/30">
-                    ★ DIAMANT COSMIQUE !
+                  <span className="text-[10px] font-black text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-500 shadow-md shadow-purple-500/30 font-mono tracking-wider">
+                    ★★★★
                   </span>
                 )}
                 {currentCard?.rarity === 'RARE' && (
-                  <span className="text-[10px] font-black text-sky-300 bg-sky-950 px-2.5 py-0.5 rounded-full border border-sky-500">
-                    ★ SAPHIR HOLO !
+                  <span className="text-[10px] font-black text-sky-300 bg-sky-950 px-2.5 py-0.5 rounded-full border border-sky-500 font-mono tracking-wider">
+                    ★★★
                   </span>
                 )}
               </div>
@@ -871,7 +871,7 @@ export default function BoosterOpening({
                         background: 'rgba(0,0,0,0.5)',
                       }}
                     >
-                      {n}× {cfg.symbol} {cfg.shortLabel}
+                      {n}× {cfg.shortLabel}
                     </span>
                   ) : null;
                 })}

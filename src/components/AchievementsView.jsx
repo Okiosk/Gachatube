@@ -2,12 +2,12 @@ import React from 'react';
 import { Trophy, Lock, CheckCircle2, Award, Sparkles, UserCheck } from 'lucide-react';
 import { ACHIEVEMENTS } from '../utils/achievements';
 
-const CATEGORY_ORDER = ['Collection', 'Combats', 'Rareté', 'Connexion', 'Économie', 'Boutique', 'Badges'];
+const CATEGORY_ORDER = ['Collection', 'Combats', 'Étoiles', 'Connexion', 'Économie', 'Boutique', 'Badges'];
 
 const CATEGORY_CONFIG = {
   Collection: { color: '#38bdf8', emoji: '🃏', name: 'Collection & Archives' },
   Combats:    { color: '#ef4444', emoji: '⚔️', name: 'Arène & Duels TCG' },
-  Rareté:     { color: '#facc15', emoji: '⭐', name: 'Chasse aux Cartes d\'Or' },
+  Étoiles:    { color: '#facc15', emoji: '⭐', name: 'Étoiles & Hauts Rangs' },
   Connexion:  { color: '#fb923c', emoji: '🔥', name: 'Régularité du Collectionneur' },
   Économie:   { color: '#34d399', emoji: '🪙', name: 'Banque de TubeCoins' },
   Boutique:   { color: '#c084fc', emoji: '🛍️', name: 'Ouvertures de Boosters' },
@@ -140,21 +140,9 @@ export default function AchievementsView({
       <div className="relative rounded-2xl p-6 sm:p-7 bg-gradient-to-r from-[#0d162b] via-[#111f3d] to-[#0d162b] border-2 border-yellow-500/40 shadow-2xl overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="gt-play-emblem w-4 h-4" />
-              <span className="text-xs font-black uppercase tracking-widest text-yellow-400 font-['Outfit']">
-                Passeport Officiel du Collectionneur
-              </span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Outfit'] flex items-center gap-3">
-              <span>Trophées & Exploits</span>
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/40">
-                Rang Élite
-              </span>
+            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Outfit']">
+              Trophées
             </h1>
-            <p className="text-xs font-mono text-slate-400 mt-1">
-              ID N° 84920 • Collectionneur Certifié GachaTube TCG
-            </p>
           </div>
 
           {/* Key Stats Chips */}
@@ -191,8 +179,7 @@ export default function AchievementsView({
 
         {/* Global Progress Bar */}
         <div className="mt-5 space-y-1.5">
-          <div className="flex justify-between text-xs text-slate-400 font-mono">
-            <span>Parcours du Collectionneur</span>
+          <div className="flex justify-end text-xs text-slate-400 font-mono">
             <span className="font-bold text-yellow-400">{unlockedCount} sur {ACHIEVEMENTS.length} complétés</span>
           </div>
           <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700">

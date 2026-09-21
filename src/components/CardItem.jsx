@@ -4,9 +4,10 @@ import { getChannelAvatar } from '../utils/channelAvatars';
 
 export const RARITY_CONFIG = {
   COMMUNE: {
-    label: 'Édition Bronze',
-    shortLabel: 'BRONZE',
-    symbol: '●',
+    label: '★',
+    shortLabel: '★',
+    symbol: '★',
+    starsText: '★',
     badgeBg: '#334155',
     accentColor: '#94a3b8',
     borderColor: '#475569',
@@ -21,9 +22,10 @@ export const RARITY_CONFIG = {
     sealColor: '#94a3b8',
   },
   PEU_COMMUNE: {
-    label: 'Édition Argent',
-    shortLabel: 'ARGENT',
-    symbol: '◆',
+    label: '★★',
+    shortLabel: '★★',
+    symbol: '★★',
+    starsText: '★★',
     badgeBg: '#064e3b',
     accentColor: '#34d399',
     borderColor: '#10b981',
@@ -38,9 +40,10 @@ export const RARITY_CONFIG = {
     sealColor: '#34d399',
   },
   RARE: {
-    label: 'Édition Or Holo',
-    shortLabel: 'OR HOLO',
-    symbol: '★',
+    label: '★★★',
+    shortLabel: '★★★',
+    symbol: '★★★',
+    starsText: '★★★',
     badgeBg: '#1e3a8a',
     accentColor: '#38bdf8',
     borderColor: '#0284c7',
@@ -55,9 +58,10 @@ export const RARITY_CONFIG = {
     sealColor: '#38bdf8',
   },
   ULTRA_RARE: {
-    label: 'Édition Diamant Cosmique',
-    shortLabel: 'DIAMANT',
-    symbol: '★HOLO',
+    label: '★★★★',
+    shortLabel: '★★★★',
+    symbol: '★★★★',
+    starsText: '★★★★',
     badgeBg: '#3b0764',
     accentColor: '#c084fc',
     borderColor: '#9333ea',
@@ -72,9 +76,10 @@ export const RARITY_CONFIG = {
     sealColor: '#c084fc',
   },
   MYTHIQUE: {
-    label: 'Prisme Noir & Or Pur',
-    shortLabel: 'PRISME NOIR',
-    symbol: '👑 SECRET',
+    label: '★★★★★',
+    shortLabel: '★★★★★',
+    symbol: '★★★★★',
+    starsText: '★★★★★',
     badgeBg: '#451a03',
     accentColor: '#fbbf24',
     borderColor: '#d97706',
@@ -351,7 +356,7 @@ export default function CardItem({
             {/* Top-right Rarity Seal */}
             <div className="absolute top-1.5 right-1.5">
               <span
-                className="px-2 py-0.5 rounded-md text-[8px] font-['Outfit'] font-black uppercase tracking-wider text-slate-950 shadow-md border border-white/30"
+                className="px-1.5 py-0.5 rounded-md text-[9px] font-mono font-black text-slate-950 shadow-md border border-white/30 tracking-tight"
                 style={{ background: rarity.sealColor }}
               >
                 {rarity.shortLabel}

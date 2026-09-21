@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Search, ChevronLeft, ChevronRight, Package, ArrowUpDown, Sparkles, Layers, Grid
+  Search, ChevronLeft, ChevronRight, Package, ArrowUpDown, Sparkles, Layers
 } from 'lucide-react';
 import CardItem, { RARITY_CONFIG } from './CardItem';
 
@@ -8,12 +8,12 @@ import CardItem, { RARITY_CONFIG } from './CardItem';
 const CARDS_PER_PAGE = 21;
 
 const RARITY_TABS = [
-  { id: 'ALL',         label: 'Toutes',     symbol: '✦', color: '#facc15', bg: 'rgba(250,204,21,0.12)' },
-  { id: 'COMMUNE',     label: 'Bronze',     symbol: '●', color: '#94a3b8', bg: 'rgba(148,163,184,0.12)' },
-  { id: 'PEU_COMMUNE', label: 'Argent',     symbol: '◆', color: '#34d399', bg: 'rgba(52,211,153,0.12)'  },
-  { id: 'RARE',        label: 'Or Holo',    symbol: '★', color: '#38bdf8', bg: 'rgba(56,189,248,0.12)'  },
-  { id: 'ULTRA_RARE',  label: 'Diamant',    symbol: '★H', color: '#c084fc', bg: 'rgba(192,132,252,0.12)' },
-  { id: 'MYTHIQUE',    label: 'Prisme Noir', symbol: '👑', color: '#fbbf24', bg: 'rgba(251,191,36,0.15)' },
+  { id: 'ALL',         label: 'Toutes', color: '#facc15', bg: 'rgba(250,204,21,0.12)' },
+  { id: 'COMMUNE',     label: '★',     color: '#94a3b8', bg: 'rgba(148,163,184,0.12)' },
+  { id: 'PEU_COMMUNE', label: '★★',    color: '#34d399', bg: 'rgba(52,211,153,0.12)'  },
+  { id: 'RARE',        label: '★★★',   color: '#38bdf8', bg: 'rgba(56,189,248,0.12)'  },
+  { id: 'ULTRA_RARE',  label: '★★★★',  color: '#c084fc', bg: 'rgba(192,132,252,0.12)' },
+  { id: 'MYTHIQUE',    label: '★★★★★', color: '#fbbf24', bg: 'rgba(251,191,36,0.15)' },
 ];
 
 export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, onOpenBoosterTab }) {
@@ -58,8 +58,6 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
         return sortOrder === 'desc' ? vB - vA : vA - vB;
       });
   }, [collectedList, selectedRarity, search, sortBy, sortOrder]);
-
-  const [viewLayout, setViewLayout] = useState('7cols'); // '7cols' | '3cols'
 
   const totalPages  = Math.max(1, Math.ceil(filteredCards.length / CARDS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
@@ -111,11 +109,8 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
                 Collection Officielle de Cartes
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-['Outfit'] flex items-center gap-3">
-              <span>Ma Collection</span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-mono">
-                21 Cartes par Page (3x7)
-              </span>
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-['Outfit']">
+              Ma Collection
             </h1>
             <p className="text-xs font-mono text-slate-400 mt-1">
               {uniqueCount} cartes uniques • {totalCardsSum} au total • {packsOpened} boosters ouverts
@@ -125,11 +120,11 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
           {/* Rarity counter pills */}
           <div className="flex flex-wrap gap-2">
             {[
-              { k: 'COMMUNE',     label: 'Bronze',      sym: '●', color: '#94a3b8', count: statsByRarity.COMMUNE },
-              { k: 'PEU_COMMUNE', label: 'Argent',      sym: '◆', color: '#34d399', count: statsByRarity.PEU_COMMUNE },
-              { k: 'RARE',        label: 'Or Holo',     sym: '★', color: '#38bdf8', count: statsByRarity.RARE },
-              { k: 'ULTRA_RARE',  label: 'Diamant',     sym: '★H', color: '#c084fc', count: statsByRarity.ULTRA_RARE },
-              { k: 'MYTHIQUE',    label: 'Prisme Noir', sym: '👑', color: '#fbbf24', count: statsByRarity.MYTHIQUE },
+              { k: 'COMMUNE',     sym: '★',     color: '#94a3b8', count: statsByRarity.COMMUNE },
+              { k: 'PEU_COMMUNE', sym: '★★',    color: '#34d399', count: statsByRarity.PEU_COMMUNE },
+              { k: 'RARE',        sym: '★★★',   color: '#38bdf8', count: statsByRarity.RARE },
+              { k: 'ULTRA_RARE',  sym: '★★★★',  color: '#c084fc', count: statsByRarity.ULTRA_RARE },
+              { k: 'MYTHIQUE',    sym: '★★★★★', color: '#fbbf24', count: statsByRarity.MYTHIQUE },
             ].map(r => (
               <div
                 key={r.k}
@@ -138,7 +133,6 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
               >
                 <span style={{ color: r.color }}>{r.sym}</span>
                 <span className="text-slate-300">{r.count}</span>
-                <span className="text-[10px] text-slate-500 uppercase">{r.label}</span>
               </div>
             ))}
           </div>
@@ -183,43 +177,20 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
                       }
                 }
               >
-                <span className="text-[10px]">{tab.symbol}</span>
-                <span>{tab.label}</span>
+                <span className="font-mono">{tab.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Layout Mode & Sort */}
+        {/* Sort Controls */}
         <div className="flex items-center gap-2 self-end lg:self-auto flex-wrap">
-          {/* Grid Toggle */}
-          <div className="flex items-center p-1 rounded-xl bg-[#0f172a] border border-slate-700 text-xs">
-            <button
-              onClick={() => setViewLayout('7cols')}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                viewLayout === '7cols' ? 'bg-yellow-400 text-slate-950 shadow' : 'text-slate-400 hover:text-white'
-              }`}
-              title="Afficher 7 colonnes"
-            >
-              7 colonnes
-            </button>
-            <button
-              onClick={() => setViewLayout('3cols')}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                viewLayout === '3cols' ? 'bg-yellow-400 text-slate-950 shadow' : 'text-slate-400 hover:text-white'
-              }`}
-              title="Afficher 3 par ligne"
-            >
-              3 par ligne
-            </button>
-          </div>
-
           <select
             value={sortBy}
             onChange={e => { setSortBy(e.target.value); setPage(1); }}
             className="rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-[#0f172a] border border-slate-700 text-slate-200 focus:outline-none focus:border-yellow-400"
           >
-            <option value="rarity">Trier : Rareté</option>
+            <option value="rarity">Trier : Étoiles</option>
             <option value="views">Trier : Vues</option>
             <option value="likes">Trier : Likes</option>
             <option value="count">Trier : Doublons</option>
@@ -234,11 +205,11 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
         </div>
       </div>
 
-      {/* ── 3. CLEAN COLLECTION GALLERY (21 CARDS PER PAGE) ── */}
+      {/* ── 3. CLEAN COLLECTION GALLERY (ALWAYS 7 COLUMNS) ── */}
       {filteredCards.length === 0 ? (
         <div className="py-20 text-center text-slate-500 bg-[#0c1322] rounded-2xl border border-slate-800">
           <p className="text-base font-bold text-slate-300">Aucune carte trouvée</p>
-          <p className="text-xs text-slate-500 mt-1">Essaie d'ajuster tes filtres de rareté ou ta recherche.</p>
+          <p className="text-xs text-slate-500 mt-1">Essaie d'ajuster tes filtres ou ta recherche.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -256,14 +227,8 @@ export default function Binder({ collection = {}, packsOpened = 0, onPlayVideo, 
               </div>
             </div>
 
-            {/* Responsive Grid: 7 columns or 3 per line according to viewLayout */}
-            <div
-              className={
-                viewLayout === '7cols'
-                  ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3.5 justify-items-center'
-                  : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center'
-              }
-            >
+            {/* Fixed 7-column Responsive Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3.5 justify-items-center">
               {pageSlice.map((item, i) => (
                 <div key={item.card?.id || `card-${i}`} className="w-full flex justify-center hover:-translate-y-1 transition-transform">
                   <CardItem
