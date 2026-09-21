@@ -10,13 +10,22 @@ let cachedCards = null;
 let cachedChannels = null;
 let cachedStats = null;
 
-// Determine base URL for static assets (respects GitHub Pages subpaths)
-const BASE_URL = import.meta.env.BASE_URL || './';
+function getBaseDataPath() {
+  if (typeof window === 'undefined') return './data/';
+  const path = window.location.pathname;
+  if (path.endsWith('/')) {
+    return `${path}data/`;
+  }
+  const dir = path.substring(0, path.lastIndexOf('/') + 1);
+  return `${dir}data/`;
+}
 
 async function loadData() {
+  const dataDir = getBaseDataPath();
+
   if (!cachedCards) {
     try {
-      const res = await window._originalFetch(`${BASE_URL}data/cards.json`);
+      const res = await window._originalFetch(`${dataDir}cards.json`);
       if (res.ok) {
         cachedCards = await res.json();
       }
@@ -28,7 +37,7 @@ async function loadData() {
 
   if (!cachedChannels) {
     try {
-      const res = await window._originalFetch(`${BASE_URL}data/channels.json`);
+      const res = await window._originalFetch(`${dataDir}channels.json`);
       if (res.ok) {
         cachedChannels = await res.json();
       }
@@ -40,7 +49,7 @@ async function loadData() {
 
   if (!cachedStats) {
     try {
-      const res = await window._originalFetch(`${BASE_URL}data/stats.json`);
+      const res = await window._originalFetch(`${dataDir}stats.json`);
       if (res.ok) {
         cachedStats = await res.json();
       }
@@ -209,16 +218,24 @@ export function initClientApiFallback() {
       return window._originalFetch(input, init);
     }
 
-    try {
-      const response = await window._originalFetch(input, init);
-      const contentType = response.headers.get('content-type') || '';
+    const isLocalhost =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' ||
+       window.location.hostname === '127.0.0.1' ||
+       window.location.port === '5173');
 
-      // If response is valid JSON (backend is running), return it directly!
-      if (response.ok && contentType.includes('application/json')) {
-        return response;
+    if (isLocalhost) {
+      try {
+        const response = await window._originalFetch(input, init);
+        const contentType = response.headers.get('content-type') || '';
+
+        // If response is valid JSON (backend is running), return it directly!
+        if (response.ok && contentType.includes('application/json')) {
+          return response;
+        }
+      } catch (err) {
+        // Backend not running — fall through to client mock
       }
-    } catch (err) {
-      // Backend not running (GitHub Pages static host) — fall through to client mock
     }
 
     // Ensure static data is loaded
