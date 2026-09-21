@@ -7,8 +7,9 @@
   "scripts": {
     "dev:server": "node server/index.js",
     "dev:client": "vite",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "vite build",
+    "build:docs": "vite build --outDir docs",
+    "export:data": "node scripts/exportStaticData.js",
     "preview": "vite preview",
     "seed": "node server/seed.js",
     "harvest": "node server/harvester.js",
