@@ -24,6 +24,12 @@ export const BOOSTER_TYPE_CONFIG = {
     odds: '68% ★ · 24% ★★ · 6% ★★★ · 2% ★★★★+',
     cardCount: 5,
     badge: '5 CARTES',
+    rates: [
+      { stars: '★', pct: '68%', color: '#94a3b8' },
+      { stars: '★★', pct: '24%', color: '#34d399' },
+      { stars: '★★★', pct: '6%', color: '#38bdf8' },
+      { stars: '4★+', pct: '2%', color: '#fbbf24' },
+    ],
   },
   gaming: {
     id: 'gaming',
@@ -41,6 +47,12 @@ export const BOOSTER_TYPE_CONFIG = {
     odds: '45% ★ · 33% ★★ · 15% ★★★ · 7% ★★★★+',
     cardCount: 5,
     badge: '5 CARTES',
+    rates: [
+      { stars: '★', pct: '45%', color: '#94a3b8' },
+      { stars: '★★', pct: '33%', color: '#34d399' },
+      { stars: '★★★', pct: '15%', color: '#38bdf8' },
+      { stars: '4★+', pct: '7%', color: '#fbbf24' },
+    ],
   },
   viral: {
     id: 'viral',
@@ -58,6 +70,12 @@ export const BOOSTER_TYPE_CONFIG = {
     odds: '20% ★ · 35% ★★ · 26% ★★★ · 19% ★★★★+',
     cardCount: 5,
     badge: '5 CARTES',
+    rates: [
+      { stars: '★', pct: '20%', color: '#94a3b8' },
+      { stars: '★★', pct: '35%', color: '#34d399' },
+      { stars: '★★★', pct: '26%', color: '#38bdf8' },
+      { stars: '4★+', pct: '19%', color: '#fbbf24' },
+    ],
   },
 
   // ── Trio 2 : 7 Cartes ──
@@ -77,6 +95,12 @@ export const BOOSTER_TYPE_CONFIG = {
     odds: '68% ★ · 24% ★★ · 6% ★★★ · 2% ★★★★+',
     cardCount: 7,
     badge: '7 CARTES',
+    rates: [
+      { stars: '★', pct: '68%', color: '#94a3b8' },
+      { stars: '★★', pct: '24%', color: '#34d399' },
+      { stars: '★★★', pct: '6%', color: '#38bdf8' },
+      { stars: '4★+', pct: '2%', color: '#fbbf24' },
+    ],
   },
   culture: {
     id: 'culture',
@@ -94,6 +118,12 @@ export const BOOSTER_TYPE_CONFIG = {
     odds: '45% ★ · 33% ★★ · 15% ★★★ · 7% ★★★★+',
     cardCount: 7,
     badge: '7 CARTES',
+    rates: [
+      { stars: '★', pct: '45%', color: '#94a3b8' },
+      { stars: '★★', pct: '33%', color: '#34d399' },
+      { stars: '★★★', pct: '15%', color: '#38bdf8' },
+      { stars: '4★+', pct: '7%', color: '#fbbf24' },
+    ],
   },
   collector: {
     id: 'collector',
@@ -111,6 +141,12 @@ export const BOOSTER_TYPE_CONFIG = {
     odds: '20% ★ · 35% ★★ · 26% ★★★ · 19% ★★★★+',
     cardCount: 7,
     badge: '7 CARTES',
+    rates: [
+      { stars: '★', pct: '20%', color: '#94a3b8' },
+      { stars: '★★', pct: '35%', color: '#34d399' },
+      { stars: '★★★', pct: '26%', color: '#38bdf8' },
+      { stars: '4★+', pct: '19%', color: '#fbbf24' },
+    ],
   },
 };
 
@@ -129,78 +165,104 @@ function timeUntilMidnight() {
   return `${h}h ${String(m).padStart(2, '0')}m`;
 }
 
-// ── Shop Booster Pack Card Component ──────────────────────────────────────────
+// ── YouTube Logo in Booster's Theme Color ────────────────────────────────────
+export function YouTubeLogo({ color = '#ff0000', className = 'w-14 h-14' }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"
+        fill={color}
+      />
+      <polygon points="9.545,8.432 15.818,12 9.545,15.568" fill="#ffffff" />
+    </svg>
+  );
+}
+
+// ── Shop Booster Pack Card Component (TCG Card Dimensions: 285px x 420px) ─────
 function ShopBoosterCard({ cfg, coins, onBuy }) {
   const canAfford = coins >= cfg.price;
   const [hovered, setHovered] = useState(false);
 
   return (
     <div
-      className="relative rounded-2xl flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-300 border-2 group"
+      className="relative w-[285px] h-[420px] rounded-[16px] flex flex-col justify-between overflow-hidden transition-all duration-300 border-2 select-none group shadow-2xl shrink-0"
       style={{
         background: cfg.gradient,
-        borderColor: hovered ? cfg.border : 'rgba(255,255,255,0.12)',
-        boxShadow: hovered ? `0 14px 32px ${cfg.glow}` : '0 6px 20px rgba(0,0,0,0.55)',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        minHeight: 375,
+        borderColor: hovered ? cfg.border : 'rgba(255,255,255,0.15)',
+        boxShadow: hovered ? `0 18px 40px ${cfg.glow}` : '0 8px 26px rgba(0,0,0,0.65)',
+        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {/* Top crimped seal of the metallic booster pack */}
-      <div className="w-full h-4 booster-crimp border-b border-black/40 flex items-center justify-center">
-        <div className="w-8 h-1 rounded-full bg-white/25" />
+      <div className="w-full h-3.5 booster-crimp border-b border-black/40 flex items-center justify-center shrink-0">
+        <div className="w-10 h-1 rounded-full bg-white/25" />
       </div>
 
       {/* Foil pack body */}
-      <div className="p-5 flex-1 flex flex-col justify-between relative overflow-hidden">
+      <div className="px-4 py-3 flex-1 flex flex-col justify-between relative overflow-hidden">
         {/* Shimmer reflection */}
         <div className="absolute inset-0 pack-shimmer opacity-25 pointer-events-none" />
 
-        {/* 1. Header: Series & Badge + Title */}
-        <div className="relative z-10 space-y-1">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="gt-play-emblem w-3.5 h-3.5 shrink-0" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-300 font-['Outfit'] truncate">
-                {cfg.series}
-              </span>
-            </div>
-            <span
-              className="px-2 py-0.5 rounded text-[8.5px] font-black uppercase tracking-wider text-slate-950 font-['Outfit'] shrink-0 shadow"
-              style={{ background: cfg.foilColor }}
-            >
-              {cfg.badge}
-            </span>
-          </div>
-          <h3 className="text-xl font-black tracking-tight text-white font-['Outfit']">
-            {cfg.name}
-          </h3>
-        </div>
-
-        {/* 2. Central Pack Artwork Emblem & Description */}
-        <div className="my-4 flex flex-col items-center justify-center relative z-10">
+        {/* 1. Header: Prominently Highlighted Card Count Banner & Series */}
+        <div className="relative z-10 flex items-center justify-between gap-2">
           <div
-            className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-2xl border-2 transition-transform duration-300 group-hover:scale-110"
+            className="px-3.5 py-1 rounded-xl font-['Outfit'] font-black text-xs uppercase tracking-wider text-slate-950 shadow-md flex items-center gap-1.5"
             style={{
-              background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.5) 100%)',
-              borderColor: cfg.border,
-              boxShadow: `0 0 25px ${cfg.glow}`,
+              background: cfg.foilColor,
+              boxShadow: `0 0 16px ${cfg.glow}`,
             }}
           >
-            <span>{cfg.emoji}</span>
+            <Layers className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>{cfg.cardCount} CARTES</span>
           </div>
-          <p className="text-[11px] text-slate-300 text-center font-medium mt-3 px-1 line-clamp-2">
-            {cfg.desc}
-          </p>
+
+          <span className="text-[10px] font-mono font-bold text-white/80 uppercase tracking-tight">
+            {cfg.series}
+          </span>
         </div>
 
-        {/* 3. Bottom Bar: Framed Odds & Buy button */}
-        <div className="relative z-10 space-y-2.5 pt-2 border-t border-white/10">
-          <div className="px-2.5 py-1.5 rounded-lg bg-black/40 border border-white/10 text-[10px] font-mono text-slate-300 text-center truncate">
-            {cfg.odds}
+        {/* 2. Central Pack Artwork: YouTube Logo in Booster's Theme Color */}
+        <div className="my-auto flex flex-col items-center justify-center relative z-10 py-1">
+          <div
+            className="w-24 h-20 rounded-2xl flex items-center justify-center shadow-2xl border-2 transition-transform duration-300 group-hover:scale-110"
+            style={{
+              background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.65) 100%)',
+              borderColor: cfg.border,
+              boxShadow: `0 0 30px ${cfg.glow}`,
+            }}
+          >
+            <YouTubeLogo color={cfg.foilColor} className="w-16 h-12" />
+          </div>
+        </div>
+
+        {/* 3. Bottom: Prominently Highlighted Drop Odds & Buy Button */}
+        <div className="relative z-10 space-y-2 pt-1">
+          {/* Highlighted Odds Panel */}
+          <div className="rounded-xl bg-black/65 border border-white/15 p-2 shadow-inner space-y-1">
+            <div className="flex items-center justify-between text-[9px] font-mono font-bold uppercase tracking-wider text-slate-300 px-0.5">
+              <span>Chances par carte</span>
+              <span style={{ color: cfg.foilColor }}>{cfg.cardCount} tirages</span>
+            </div>
+            <div className="grid grid-cols-4 gap-1 text-center">
+              {(cfg.rates || []).map((r, i) => (
+                <div
+                  key={i}
+                  className="bg-slate-950/85 rounded-lg py-1 px-0.5 border border-white/10"
+                >
+                  <span className="text-[9.5px] font-mono block leading-none mb-1 font-bold" style={{ color: r.color }}>
+                    {r.stars}
+                  </span>
+                  <span className="text-xs font-black text-white font-mono leading-none">
+                    {r.pct}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
+          {/* Buy Button */}
           <button
             onClick={() => onBuy(cfg.id)}
             disabled={!canAfford}
@@ -218,14 +280,14 @@ function ShopBoosterCard({ cfg, coins, onBuy }) {
       </div>
 
       {/* Bottom crimped seal */}
-      <div className="w-full h-4 booster-crimp border-t border-black/40 flex items-center justify-center">
-        <div className="w-8 h-1 rounded-full bg-white/20" />
+      <div className="w-full h-3.5 booster-crimp border-t border-black/40 flex items-center justify-center shrink-0">
+        <div className="w-10 h-1 rounded-full bg-white/20" />
       </div>
     </div>
   );
 }
 
-// ── Quick Open Mini Pack in Inventory ─────────────────────────────────────────
+// ── Quick Open Mini Pack in Inventory (Card Dimensions: 210px x 310px) ────────
 function InventoryBoosterCard({ cfg, count, onOpen }) {
   if (count <= 0) return null;
   const [hovered, setHovered] = useState(false);
@@ -235,7 +297,7 @@ function InventoryBoosterCard({ cfg, count, onOpen }) {
       onClick={onOpen}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative flex-shrink-0 w-44 sm:w-48 rounded-2xl flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-300 border-2 select-none group shadow-xl"
+      className="relative flex-shrink-0 w-[210px] h-[310px] rounded-[16px] flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-300 border-2 select-none group shadow-xl"
       style={{
         background: cfg.gradient,
         borderColor: hovered ? cfg.border : 'rgba(250, 204, 21, 0.45)',
@@ -246,54 +308,67 @@ function InventoryBoosterCard({ cfg, count, onOpen }) {
       }}
     >
       {/* Top crimped seal */}
-      <div className="w-full h-3.5 booster-crimp border-b border-black/40 flex items-center justify-center">
+      <div className="w-full h-3 booster-crimp border-b border-black/40 flex items-center justify-center shrink-0">
         <div className="w-8 h-1 rounded-full bg-white/25" />
       </div>
 
       {/* Pack body */}
-      <div className="p-4 flex-1 flex flex-col justify-between relative overflow-hidden">
+      <div className="p-3 flex-1 flex flex-col justify-between relative overflow-hidden">
         {/* Shimmer reflection */}
         <div className="absolute inset-0 pack-shimmer opacity-30 pointer-events-none" />
 
-        {/* Top Badges Row: Card count tag & Big Quantity counter */}
-        <div className="relative z-10 flex items-center justify-between gap-1 mb-2">
-          <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-black/40 border border-white/15 text-slate-200 font-mono">
-            {cfg.cardCount} cartes
-          </span>
+        {/* Top Badges Row: Highlighted Card count & Quantity counter */}
+        <div className="relative z-10 flex items-center justify-between gap-1">
+          <div
+            className="px-2 py-0.5 rounded-lg font-['Outfit'] font-black text-[10px] uppercase tracking-wider text-slate-950 shadow-md flex items-center gap-1"
+            style={{ background: cfg.foilColor }}
+          >
+            <Layers className="w-3 h-3 stroke-[2.5]" />
+            <span>{cfg.cardCount} CARTES</span>
+          </div>
 
           <span
-            className="px-2.5 py-0.5 rounded-full text-xs font-black text-slate-950 font-mono shadow-md border-2 border-[#0a0e1a] animate-pulse"
+            className="px-2 py-0.5 rounded-full text-xs font-black text-slate-950 font-mono shadow-md border-2 border-[#0a0e1a] animate-pulse"
             style={{ background: cfg.foilColor }}
           >
             x{count}
           </span>
         </div>
 
-        {/* Center Artwork Emblem */}
-        <div className="my-2 flex flex-col items-center justify-center relative z-10">
+        {/* Center Artwork Emblem: YouTube Logo in Booster's Theme Color */}
+        <div className="my-auto flex flex-col items-center justify-center relative z-10">
           <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-xl border-2 transition-transform duration-300 group-hover:scale-110"
+            className="w-16 h-14 rounded-xl flex items-center justify-center shadow-xl border-2 transition-transform duration-300 group-hover:scale-110"
             style={{
               background: 'radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.55) 100%)',
               borderColor: cfg.border,
               boxShadow: `0 0 20px ${cfg.glow}`,
             }}
           >
-            <span>{cfg.emoji}</span>
+            <YouTubeLogo color={cfg.foilColor} className="w-11 h-8" />
           </div>
+        </div>
 
-          <h4 className="font-black text-sm text-white tracking-tight font-['Outfit'] text-center mt-2.5 truncate w-full">
-            {cfg.name}
-          </h4>
-          <p className="text-[9.5px] font-mono text-slate-300 text-center truncate w-full mt-0.5 opacity-90">
-            {cfg.badge}
-          </p>
+        {/* Highlighted Odds Mini Panel */}
+        <div className="relative z-10 rounded-lg bg-black/60 border border-white/10 p-1.5 space-y-0.5">
+          <div className="grid grid-cols-4 gap-1 text-center">
+            {(cfg.rates || []).map((r, i) => (
+              <div key={i} className="bg-slate-950/80 rounded py-0.5 px-0.5 border border-white/10">
+                <span className="text-[8.5px] font-mono block leading-tight font-bold" style={{ color: r.color }}>
+                  {r.stars}
+                </span>
+                <span className="text-[10px] font-black text-white font-mono leading-tight">
+                  {r.pct}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Action Button: Rip pack */}
-        <div className="relative z-10 mt-3">
+        <div className="relative z-10 mt-1">
           <div
-            className="w-full py-2 rounded-xl text-center text-xs font-black uppercase tracking-wider text-slate-950 font-['Outfit'] flex items-center justify-center gap-1.5 shadow-lg group-hover:brightness-110 transition-all"
+            className="w-full py-1.5 rounded-lg text-center text-xs font-black uppercase tracking-wider text-slate-950 font-['Outfit'] flex items-center justify-center gap-1.5 shadow-lg group-hover:brightness-110 transition-all"
             style={{ 
               background: cfg.foilColor,
               boxShadow: `0 4px 14px ${cfg.glow}`
@@ -306,7 +381,7 @@ function InventoryBoosterCard({ cfg, count, onOpen }) {
       </div>
 
       {/* Bottom crimped seal */}
-      <div className="w-full h-3.5 booster-crimp border-t border-black/40 flex items-center justify-center">
+      <div className="w-full h-3 booster-crimp border-t border-black/40 flex items-center justify-center shrink-0">
         <div className="w-8 h-1 rounded-full bg-white/20" />
       </div>
     </div>
@@ -588,7 +663,7 @@ export default function BoosterOpening({
                   3 niveaux de probabilités croissantes
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                 {BOOSTER_TRIO_5.map((type) => (
                   <ShopBoosterCard
                     key={type}
@@ -613,7 +688,7 @@ export default function BoosterOpening({
                   3 niveaux de probabilités croissantes
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                 {BOOSTER_TRIO_7.map((type) => (
                   <ShopBoosterCard
                     key={type}
@@ -632,18 +707,22 @@ export default function BoosterOpening({
       {stage === 'tearing' && (
         <div className="py-16 flex flex-col items-center gap-8 w-full max-w-md animate-fade-in">
           <div className="text-center space-y-1">
-            <h2 className="font-['Outfit'] font-black text-2xl text-white">
-              {openingCfg.name}
-            </h2>
-            <p className="text-xs font-mono text-slate-400">
+            <div
+              className="px-4 py-1.5 rounded-2xl font-['Outfit'] font-black text-sm uppercase tracking-wider text-slate-950 shadow-md inline-flex items-center gap-1.5"
+              style={{ background: openingCfg.foilColor }}
+            >
+              <Layers className="w-4 h-4 stroke-[2.5]" />
+              <span>{openingCfg.cardCount} CARTES</span>
+            </div>
+            <p className="text-xs font-mono text-slate-400 mt-1">
               Glissez ou cliquez sur la tirette dorée pour déchirer le sachet !
             </p>
           </div>
 
-          {/* Interactive Sealed Pack */}
+          {/* Interactive Sealed Pack (TCG Card Dimensions: 285px x 420px) */}
           <div
             onClick={handleRipTearStrip}
-            className={`relative w-72 h-[420px] rounded-2xl cursor-pointer transition-all duration-300 shadow-2xl border-2 flex flex-col justify-between overflow-hidden group select-none ${
+            className={`relative w-[285px] h-[420px] rounded-[16px] cursor-pointer transition-all duration-300 shadow-2xl border-2 flex flex-col justify-between overflow-hidden group select-none ${
               isTearing ? 'scale-105' : 'hover:scale-[1.02]'
             }`}
             style={{
@@ -653,7 +732,7 @@ export default function BoosterOpening({
             }}
           >
             {/* Top Crimp */}
-            <div className="w-full h-5 booster-crimp border-b border-black/40 flex items-center justify-center">
+            <div className="w-full h-4 booster-crimp border-b border-black/40 flex items-center justify-center shrink-0">
               <div className="w-10 h-1 rounded-full bg-white/25" />
             </div>
 
@@ -672,30 +751,41 @@ export default function BoosterOpening({
             </div>
 
             {/* Pack central graphics */}
-            <div className="p-6 flex-1 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="p-5 flex-1 flex flex-col items-center justify-center text-center relative overflow-hidden">
               <div className="absolute inset-0 pack-shimmer opacity-20 pointer-events-none" />
 
               <div
-                className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl shadow-2xl border-2 mb-4"
+                className="w-24 h-20 rounded-2xl flex items-center justify-center shadow-2xl border-2 mb-3 transition-transform duration-300 group-hover:scale-105"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.5) 100%)',
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.65) 100%)',
                   borderColor: openingCfg.border,
                   boxShadow: `0 0 30px ${openingCfg.glow}`,
                 }}
               >
-                <span>{openingCfg.emoji}</span>
+                <YouTubeLogo color={openingCfg.foilColor} className="w-16 h-12" />
               </div>
 
-              <h3 className="font-['Outfit'] font-black text-xl text-white tracking-wide">
-                {openingCfg.name}
-              </h3>
-              <span className="text-xs font-mono text-slate-300 mt-1">
-                {openingCfg.series}
-              </span>
+              <div
+                className="px-3 py-1 rounded-xl font-['Outfit'] font-black text-xs uppercase tracking-wider text-slate-950 shadow-md inline-flex items-center gap-1.5"
+                style={{ background: openingCfg.foilColor }}
+              >
+                <Layers className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>{openingCfg.cardCount} CARTES</span>
+              </div>
+
+              {/* Highlighted Odds Mini Panel in tearing stage */}
+              <div className="grid grid-cols-4 gap-1 text-center w-full max-w-[230px] mt-3 rounded-xl bg-black/60 border border-white/15 p-2 shadow-inner">
+                {(openingCfg.rates || []).map((r, i) => (
+                  <div key={i} className="bg-slate-950/80 rounded py-1 px-0.5 border border-white/10">
+                    <span className="text-[9px] font-mono block leading-tight font-bold" style={{ color: r.color }}>{r.stars}</span>
+                    <span className="text-[11px] font-black text-white font-mono leading-tight">{r.pct}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Bottom Crimp */}
-            <div className="w-full h-5 booster-crimp border-t border-black/40 flex items-center justify-center">
+            <div className="w-full h-4 booster-crimp border-t border-black/40 flex items-center justify-center shrink-0">
               <div className="w-10 h-1 rounded-full bg-white/25" />
             </div>
           </div>
